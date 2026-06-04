@@ -7,9 +7,11 @@
   'use strict';
 
   const state = {
-    signins: [], riskySignins: [], riskyUsers: [], audit: [],
-    source: 'sample', view: 'overview', loadedAt: null, range: '30d',
+    signins: [], riskySignins: [], riskyUsers: [], audit: [], defender: [], privRoles: [],
+    source: 'sample', view: 'overview', loadedAt: null, laRange: '30d',
+    dateRange: { preset: '30d', startMs: 0, endMs: 0 },
   };
+  const DAYMS = 86400000;
 
   const $ = (sel, el = document) => el.querySelector(sel);
   const el = (id) => document.getElementById(id);
@@ -33,13 +35,16 @@
   async function loadSample() {
     setStatus('Loading bundled sample data…');
     const j = (f) => fetch(`data/${f}`).then((r) => { if (!r.ok) throw new Error(`${f}: ${r.status}`); return r.json(); });
-    const [si, au, ru, rs] = await Promise.all([
+    const [si, au, ru, rs, pr, df] = await Promise.all([
       j('signin-logs.json'), j('audit-logs.json'), j('risky-users.json'), j('risky-signins.json'),
+      j('privileged-roles.json'), j('defender-events.json'),
     ]);
     state.signins = Parsers.normalizeSignIns(si);
     state.audit = Parsers.normalizeAudit(au);
     state.riskyUsers = Parsers.normalizeRiskyUsers(ru);
     state.riskySignins = Parsers.normalizeRiskySignIns(rs);
+    state.privRoles = Parsers.normalizePrivilegedRoles(pr);
+    state.defender = Parsers.normalizeDefender(df);
     state.source = 'sample';
     finishLoad();
   }
@@ -49,7 +54,7 @@
     const data = await LogAnalytics.loadAll(cfg);
     Object.assign(state, data);
     state.source = 'loganalytics';
-    state.range = cfg.range;
+    state.laRange = cfg.range;
     finishLoad();
   }
 
@@ -67,6 +72,8 @@
       case 'audit': state.audit = Parsers.normalizeAudit(raw); break;
       case 'riskyUsers': state.riskyUsers = Parsers.normalizeRiskyUsers(raw); break;
       case 'riskySignins': state.riskySignins = Parsers.normalizeRiskySignIns(raw); break;
+      case 'privRoles': state.privRoles = Parsers.normalizePrivilegedRoles(raw); break;
+      case 'defender': state.defender = Parsers.normalizeDefender(raw); break;
       default: state.signins = Parsers.normalizeSignIns(raw);
     }
     state.source = 'upload';
@@ -84,8 +91,80 @@
     // Reset per-widget filters & cached analytics for the freshly loaded data.
     signinFilters = SIGNIN_FILTER_DEFAULTS();
     delete sigCache.unusual;
+    // Default to last 30 days; widen to "all" if the data is older than that.
+    setDatePreset('30d', false);
+    if (!state.signins.some((s) => inRange(s.dateTime)) && !state.audit.some((a) => inRange(a.dateTime))) {
+      setDatePreset('all', false);
+    }
     render();
     setStatus('');
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Global date range — filters every data view in real time                */
+  /* ---------------------------------------------------------------------- */
+  const PRESET_DAYS = { '24h': 1, '7d': 7, '30d': 30, '90d': 90 };
+  function setDatePreset(preset, doRender = true) {
+    const now = Date.now();
+    state.dateRange.preset = preset;
+    if (preset === 'all') { state.dateRange.startMs = 0; state.dateRange.endMs = now + DAYMS; }
+    else { state.dateRange.startMs = now - PRESET_DAYS[preset] * DAYMS; state.dateRange.endMs = now + DAYMS; }
+    if (doRender) render();
+  }
+  function setCustomRange(fromStr, toStr) {
+    const r = state.dateRange;
+    if (fromStr) r.startMs = new Date(fromStr + 'T00:00:00Z').getTime();
+    if (toStr) r.endMs = new Date(toStr + 'T23:59:59Z').getTime();
+    if (r.startMs > r.endMs) { const t = r.startMs; r.startMs = r.endMs; r.endMs = t; }
+    r.preset = 'custom';
+    render();
+  }
+  const inRange = (d) => { const t = +(d instanceof Date ? d : new Date(d)); return t >= state.dateRange.startMs && t <= state.dateRange.endMs; };
+  const ymd = (ms) => new Date(ms).toISOString().slice(0, 10);
+
+  /* Ranged datasets (recomputed once per render) */
+  function recomputeRanged() {
+    sigCache.signins = state.signins.filter((s) => inRange(s.dateTime));
+    sigCache.riskySignins = state.riskySignins.filter((s) => inRange(s.dateTime));
+    sigCache.riskyUsers = state.riskyUsers.filter((u) => isNaN(u.lastUpdated) || inRange(u.lastUpdated));
+    sigCache.audit = state.audit.filter((a) => inRange(a.dateTime));
+    sigCache.defender = state.defender.filter((d) => inRange(d.dateTime));
+    sigCache.unusual = null; // computed lazily by the sign-in widget
+  }
+  const rangeDays = () => Math.max(1, Math.round((Math.min(state.dateRange.endMs, Date.now()) - state.dateRange.startMs) / DAYMS));
+
+  function renderTopbar() {
+    const bar = el('topbar');
+    if (!bar) return;
+    if (state.view === 'source') { bar.innerHTML = ''; bar.style.display = 'none'; return; }
+    bar.style.display = '';
+    const r = state.dateRange;
+    const presets = [['24h', '24h'], ['7d', '7d'], ['30d', '30d'], ['90d', '90d'], ['all', 'All']];
+    bar.innerHTML = `
+      <div class="dr-left">
+        <span class="dr-label">Date range</span>
+        <div class="dr-presets">
+          ${presets.map(([v, l]) => `<button class="dr-preset ${r.preset === v ? 'active' : ''}" data-preset="${v}">${l}</button>`).join('')}
+        </div>
+        <div class="dr-custom">
+          <input type="date" id="dr-from" value="${esc(r.startMs ? ymd(r.startMs) : '')}" max="${esc(ymd(Date.now()))}"/>
+          <span>→</span>
+          <input type="date" id="dr-to" value="${esc(ymd(Math.min(r.endMs, Date.now())))}" max="${esc(ymd(Date.now()))}"/>
+        </div>
+      </div>
+      <div class="dr-right">
+        <span class="dr-live"><i></i>Live</span>
+        <span class="muted">${esc(rangeSummary())}</span>
+      </div>`;
+    el('dr-from').addEventListener('change', (e) => setCustomRange(e.target.value, el('dr-to').value));
+    el('dr-to').addEventListener('change', (e) => setCustomRange(el('dr-from').value, e.target.value));
+    bar.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => setDatePreset(b.dataset.preset)));
+  }
+  function rangeSummary() {
+    const r = state.dateRange;
+    if (r.preset === 'all') return 'All available data';
+    const from = ymd(r.startMs), to = ymd(Math.min(r.endMs, Date.now()));
+    return from === to ? from : `${from} → ${to}`;
   }
 
   /* ---------------------------------------------------------------------- */
@@ -94,19 +173,23 @@
   const NAV = [
     ['overview', 'Overview', '◧'],
     ['signins', 'Sign-in Analytics', '⇲'],
+    ['governance', 'Governance & Threats', '⛨'],
     ['audit', 'Audit Logs', '☰'],
     ['source', 'Data Source', '⛁'],
   ];
 
   function render() {
+    recomputeRanged();
     el('nav').innerHTML = NAV.map(([id, label, icon]) =>
       `<button class="nav-item ${state.view === id ? 'active' : ''}" data-view="${id}">
          <span class="nav-icon">${icon}</span>${label}</button>`).join('');
     el('source-badge').innerHTML = sourceBadge();
+    renderTopbar();
     const v = state.view;
     const body = el('view');
     if (v === 'overview') body.innerHTML = viewOverview();
     else if (v === 'signins') { body.innerHTML = viewSignins(); wireSignins(); }
+    else if (v === 'governance') { body.innerHTML = viewGovernance(); wireGovernance(); }
     else if (v === 'audit') { body.innerHTML = viewAudit(); wireAudit(); }
     else if (v === 'source') { body.innerHTML = viewSource(); wireSource(); }
   }
@@ -122,26 +205,35 @@
   /* Overview                                                                */
   /* ---------------------------------------------------------------------- */
   function viewOverview() {
-    const s = state.signins;
+    const s = sigCache.signins;
+    const days = rangeDays();
     const failures = s.filter((x) => !x.success);
     const legacy = s.filter((x) => x.isLegacy);
-    const unusual = Analytics.unusualActivity(s);
-    const series = Analytics.dailySeries(s, 30);
-    const failSeries = Analytics.dailySeries(s, 30, (x) => !x.success);
+    const unusual = sigCache.unusual || (sigCache.unusual = Analytics.unusualActivity(s));
+    const series = Analytics.dailySeries(s, days);
+    const failSeries = Analytics.dailySeries(s, days, (x) => !x.success);
     const merged = series.map((d, i) => ({ ...d, alert: failSeries[i].value > 12 }));
+    const ru = sigCache.riskyUsers, rs = sigCache.riskySignins, au = sigCache.audit;
+    const auditFail = au.filter((a) => a.result === 'failure').length;
+    const ga = Governance.globalAdmins(state.privRoles).length;
+    const defender = sigCache.defender;
+    const delivered = defender.filter((d) => d.delivered).length;
 
     return `
-      ${header('Security Overview', 'Sign-in & audit posture across Microsoft Entra ID and M365')}
+      ${header('Security Overview', 'Sign-in, audit, governance & threat posture across Microsoft Entra ID and M365')}
       <div class="grid stats">
         ${stat('Sign-ins', fmtNum(s.length), `${fmtNum(failures.length)} failed`, 'low')}
-        ${stat('Risky users', fmtNum(state.riskyUsers.length), countLvl(state.riskyUsers, 'high') + ' high', 'medium')}
-        ${stat('Risky sign-ins', fmtNum(state.riskySignins.length), countLvl(state.riskySignins, 'high', 'riskLevel') + ' high', 'medium')}
+        ${stat('Risky users', fmtNum(ru.length), countLvl(ru, 'high') + ' high', 'medium')}
+        ${stat('Risky sign-ins', fmtNum(rs.length), countLvl(rs, 'high', 'riskLevel') + ' high', 'medium')}
         ${stat('Legacy auth', fmtNum(legacy.length), pctOf(legacy.length, s.length) + ' of traffic', 'high')}
         ${stat('Flagged users', fmtNum(unusual.length), unusual.filter((u) => u.severity === 'high').length + ' high severity', 'high')}
-        ${stat('Audit events', fmtNum(state.audit.length), countAuditFail() + ' failed', 'low')}
+        ${stat('Global Admins', fmtNum(ga), ga > 5 ? 'above recommended' : 'within guidance', ga > 5 ? 'high' : 'low')}
+        ${stat('OAuth consents', fmtNum(Governance.oauthConsents(au).length), Governance.oauthConsents(au).filter((c) => c.risky).length + ' high-risk', 'medium')}
+        ${stat('Defender threats', fmtNum(defender.length), `${fmtNum(delivered)} delivered`, 'high')}
+        ${stat('Audit events', fmtNum(au.length), auditFail + ' failed', 'low')}
       </div>
       <div class="grid cols-2">
-        ${card('Sign-in volume — last 30 days', Charts.vbar(merged), 'Red bars mark days with elevated failure counts')}
+        ${card('Sign-in volume', Charts.vbar(merged), 'Red bars mark days with elevated failure counts')}
         ${card('Sign-in outcome', Charts.donut([
           { label: 'Success', value: s.length - failures.length, color: RISK.low },
           { label: 'Failure', value: failures.length, color: RISK.high },
@@ -149,8 +241,17 @@
       </div>
       <div class="grid cols-2">
         ${card('Top flagged users (unusual activity)', topFlaggedMini(unusual))}
-        ${card('Sign-in risk levels', Charts.donut(riskBreakdown(state.riskySignins, 'riskLevel'), { centerLabel: 'risky' }))}
+        ${card('Email threats by type (Defender)', Charts.donut(threatBreakdown(defender), { centerLabel: 'threats' }))}
       </div>`;
+  }
+  function threatBreakdown(defender) {
+    const c = { Phish: 0, Malware: 0, Spam: 0 };
+    defender.forEach((d) => { if (c[d.threat] !== undefined) c[d.threat]++; });
+    return [
+      { label: 'Phish', value: c.Phish, color: RISK.high },
+      { label: 'Malware', value: c.Malware, color: RISK.medium },
+      { label: 'Spam', value: c.Spam, color: RISK.low },
+    ].filter((x) => x.value > 0);
   }
 
   function topFlaggedMini(unusual) {
@@ -215,7 +316,7 @@
       'Impossible travel, password spray, off-hours bursts, new geographies, legacy auth & Identity Protection signals');
   }
   function renderUnusualBody() {
-    const all = sigCache.unusual || (sigCache.unusual = Analytics.unusualActivity(state.signins));
+    const all = sigCache.unusual || (sigCache.unusual = Analytics.unusualActivity(sigCache.signins));
     const counts = { high: 0, medium: 0, low: 0 };
     all.forEach((u) => counts[u.severity]++);
     const f = signinFilters.unusual;
@@ -243,7 +344,7 @@
          ${chipCount('High', counts.high, RISK.high)}
          ${chipCount('Medium', counts.medium, RISK.medium)}
          ${chipCount('Low', counts.low, RISK.low)}
-         <span class="muted">Behavioural anomaly scoring across ${fmtNum(state.signins.length)} sign-ins</span>
+         <span class="muted">Behavioural anomaly scoring across ${fmtNum(sigCache.signins.length)} sign-ins</span>
        </div>
        <div class="flag-grid">${cards || '<div class="ch-empty">No users match this filter</div>'}</div>`;
     setCount('fu-count', list.length, all.length, 'users');
@@ -252,7 +353,7 @@
   /* Widget 2 — Risky users ----------------------------------------------- */
   function widgetRiskyUsers() {
     const f = signinFilters.riskyUsers;
-    const states = distinct(state.riskyUsers, (r) => r.riskState);
+    const states = distinct(sigCache.riskyUsers, (r) => r.riskState);
     return card('Risky users',
       `<div class="widget-filters">
          ${fSel('fru-level', f.level, [['all', 'All risk'], ['high', 'High'], ['medium', 'Medium'], ['low', 'Low']])}
@@ -265,7 +366,7 @@
   }
   function renderRiskyUsersBody() {
     const f = signinFilters.riskyUsers;
-    let u = [...state.riskyUsers].sort((a, b) => lvlRank(b.riskLevel) - lvlRank(a.riskLevel));
+    let u = [...sigCache.riskyUsers].sort((a, b) => lvlRank(b.riskLevel) - lvlRank(a.riskLevel));
     if (f.level !== 'all') u = u.filter((r) => r.riskLevel === f.level);
     if (f.state !== 'all') u = u.filter((r) => r.riskState === f.state);
     if (f.q.trim()) u = u.filter((r) => matches(f.q, r.user, r.upn));
@@ -281,13 +382,13 @@
       `<div class="split">${chart}
         <div class="tbl-scroll"><table class="tbl"><thead><tr><th>User</th><th>Risk</th><th>State</th><th>Updated</th></tr></thead>
         <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`;
-    setCount('fru-count', u.length, state.riskyUsers.length, 'users');
+    setCount('fru-count', u.length, sigCache.riskyUsers.length, 'users');
   }
 
   /* Widget 3 — Risky sign-ins -------------------------------------------- */
   function widgetRiskySignins() {
     const f = signinFilters.riskySignins;
-    const details = distinct(state.riskySignins, (r) => r.riskDetail).filter((d) => d && d !== 'none');
+    const details = distinct(sigCache.riskySignins, (r) => r.riskDetail).filter((d) => d && d !== 'none');
     return card('Risky sign-ins',
       `<div class="widget-filters">
          ${fSel('frs-level', f.level, [['all', 'All risk'], ['high', 'High'], ['medium', 'Medium'], ['low', 'Low']])}
@@ -300,7 +401,7 @@
   }
   function renderRiskySigninsBody() {
     const f = signinFilters.riskySignins;
-    let rs = [...state.riskySignins].sort((a, b) => b.dateTime - a.dateTime);
+    let rs = [...sigCache.riskySignins].sort((a, b) => b.dateTime - a.dateTime);
     if (f.level !== 'all') rs = rs.filter((r) => r.riskLevel === f.level);
     if (f.detail !== 'all') rs = rs.filter((r) => r.riskDetail === f.detail);
     if (f.q.trim()) rs = rs.filter((r) => matches(f.q, r.user, r.upn, r.ip, r.location));
@@ -316,13 +417,13 @@
       `<div class="split">${chart}
         <div class="tbl-scroll"><table class="tbl"><thead><tr><th>User / source</th><th>Risk</th><th>Detection</th><th>When</th></tr></thead>
         <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`;
-    setCount('frs-count', rs.length, state.riskySignins.length, 'sign-ins');
+    setCount('frs-count', rs.length, sigCache.riskySignins.length, 'sign-ins');
   }
 
   /* Widget 4 — Legacy sign-in attempts ----------------------------------- */
   function widgetLegacy() {
     const f = signinFilters.legacy;
-    const protos = distinct(state.signins.filter((s) => s.isLegacy), (s) => s.clientApp || 'Unknown');
+    const protos = distinct(sigCache.signins.filter((s) => s.isLegacy), (s) => s.clientApp || 'Unknown');
     return cardWide('Legacy authentication attempts',
       `<div class="widget-filters">
          ${fSel('fl-proto', f.proto, [['all', 'All protocols'], ...protos.map((p) => [p, p])])}
@@ -335,7 +436,7 @@
   }
   function renderLegacyBody() {
     const f = signinFilters.legacy;
-    const allLegacy = state.signins.filter((s) => s.isLegacy);
+    const allLegacy = sigCache.signins.filter((s) => s.isLegacy);
     const pass = (s) =>
       (f.proto === 'all' || (s.clientApp || 'Unknown') === f.proto) &&
       (f.result === 'all' || (f.result === 'success' ? s.success : !s.success)) &&
@@ -343,7 +444,7 @@
     const legacy = allLegacy.filter(pass);
     const byProto = Analytics.topBy(legacy, (s) => s.clientApp || 'Unknown', 8);
     const byUser = Analytics.topBy(legacy, (s) => s.user || s.upn, 8);
-    const series = Analytics.dailySeries(legacy, 30, () => true);
+    const series = Analytics.dailySeries(legacy, rangeDays(), () => true);
     const failed = legacy.filter((s) => !s.success).length;
     el('legacy-body').innerHTML =
       `<div class="widget-summary">
@@ -362,7 +463,7 @@
 
   /* Wire all sign-in widget filters after the view is rendered ------------ */
   function wireSignins() {
-    sigCache.unusual = Analytics.unusualActivity(state.signins);
+    sigCache.unusual = Analytics.unusualActivity(sigCache.signins);
     renderUnusualBody();
     renderRiskyUsersBody();
     renderRiskySigninsBody();
@@ -387,12 +488,251 @@
   }
 
   /* ---------------------------------------------------------------------- */
+  /* Governance & Threats — components 1–9                                    */
+  /* ---------------------------------------------------------------------- */
+  const govFilters = {};
+  let govCache = {};
+
+  function computeGov() {
+    const au = sigCache.audit;
+    govCache = {
+      ga: Governance.globalAdmins(state.privRoles),
+      roleInv: Governance.roleInventory(state.privRoles),
+      gaChanges: Governance.globalAdminChanges(au),
+      priv: Governance.privilegedAssignments(au),
+      ca: Governance.caChanges(au),
+      sharing: Governance.sharingPolicyChanges(au),
+      external: Governance.externalUsers(au),
+      anon: Governance.anonymousLinks(au),
+      forward: Governance.forwardingRules(au),
+      oauth: Governance.oauthConsents(au),
+      defender: sigCache.defender,
+    };
+  }
+
+  function viewGovernance() {
+    computeGov();
+    const ga = govCache.ga.length;
+    return `
+      ${header('Governance & Threats', 'Privileged access, tenant-configuration changes & Microsoft Defender threats')}
+      <div class="grid stats">
+        ${stat('Global Admins', fmtNum(ga), ga > 5 ? 'above recommended (≤5)' : 'within guidance', ga > 5 ? 'high' : 'low')}
+        ${stat('New priv. assignments', fmtNum(govCache.priv.length), 'in selected range', 'medium')}
+        ${stat('Cond. Access changes', fmtNum(govCache.ca.length), 'in selected range', 'medium')}
+        ${stat('SharePoint policy', fmtNum(govCache.sharing.length), 'sharing changes', 'medium')}
+        ${stat('New external users', fmtNum(govCache.external.length), 'guest invitations', 'medium')}
+        ${stat('Anonymous links', fmtNum(govCache.anon.length), 'created', 'high')}
+        ${stat('Forwarding rules', fmtNum(govCache.forward.length), govCache.forward.filter((f) => f.external).length + ' external', 'high')}
+        ${stat('OAuth consents', fmtNum(govCache.oauth.length), govCache.oauth.filter((c) => c.risky).length + ' high-risk', 'medium')}
+        ${stat('Defender threats', fmtNum(govCache.defender.length), govCache.defender.filter((d) => d.delivered).length + ' delivered', 'high')}
+      </div>
+      <div class="grid cols-2">
+        ${govShellGlobalAdmins()}
+        ${govShell('priv', 'New privileged role assignments', 'Members added to privileged directory roles', 'Filter member / role…')}
+      </div>
+      <div class="grid cols-2">
+        ${govShell('ca', 'Conditional Access changes', 'CA policies added, updated or deleted', 'Filter policy…')}
+        ${govShell('sharing', 'SharePoint sharing policy changes', 'Tenant external-sharing configuration', 'Filter change…')}
+      </div>
+      <div class="grid cols-2">
+        ${govShell('external', 'New external (guest) users', 'B2B invitations / #EXT# accounts', 'Filter user…')}
+        ${govShell('anon', 'Anonymous sharing links created', 'Anyone-with-the-link files (SharePoint/OneDrive)', 'Filter file…')}
+      </div>
+      <div class="grid cols-2">
+        ${govShell('forward', 'Mail forwarding rules', 'Inbox rules & mailbox forwarding', 'Filter mailbox / target…')}
+        ${govShell('oauth', 'OAuth app consents', 'Delegated & application permission grants', 'Filter app…')}
+      </div>
+      ${govShellDefender()}`;
+  }
+
+  function govShell(id, title, foot, ph) {
+    govFilters[id] = govFilters[id] || '';
+    return card(title,
+      `<div class="widget-filters">${fSearch('gf-' + id, govFilters[id], ph)}<span id="gc-${id}" class="filter-count muted"></span></div>
+       <div id="gb-${id}"></div>`, foot);
+  }
+  function govShellGlobalAdmins() {
+    return card('Global administrators',
+      `<div id="gb-ga"></div>`, 'Standing Global Administrator membership (point-in-time) + recent changes');
+  }
+  function govShellDefender() {
+    govFilters.defender = govFilters.defender || '';
+    return cardWide('Microsoft Defender for Office 365 — phishing & malware',
+      `<div class="widget-filters">${fSearch('gf-defender', govFilters.defender, 'Filter sender / subject / recipient…')}<span id="gc-defender" class="filter-count muted"></span></div>
+       <div id="gb-defender"></div>`, 'Email threats detected by Defender (EmailEvents) across the selected range');
+  }
+
+  /* Generic ranged + searchable table renderer for governance widgets */
+  function renderGovBody(id, all, columns, searchFields, opts = {}) {
+    const q = (govFilters[id] || '').trim().toLowerCase();
+    const rows = q ? all.filter((r) => searchFields(r).some((f) => String(f || '').toLowerCase().includes(q))) : all;
+    const head = '<tr>' + columns.map((c) => `<th>${esc(c.h)}</th>`).join('') + '</tr>';
+    const body = rows.slice(0, 300).map((r) => '<tr>' + columns.map((c) => `<td>${c.c(r)}</td>`).join('') + '</tr>').join('') || emptyRow(columns.length);
+    el('gb-' + id).innerHTML =
+      `${opts.summary ? `<div class="widget-summary">${opts.summary}</div>` : ''}
+       <div class="tbl-scroll"><table class="tbl"><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
+    setCount('gc-' + id, rows.length, all.length, opts.noun || 'events');
+  }
+
+  const privPillClass = (role) => /global|privileged|security|authentication admin/i.test(role) ? 'pill-high' : 'pill-medium';
+  const threatPill = (t) => `<span class="pill ${t === 'Phish' ? 'pill-high' : t === 'Malware' ? 'pill-medium' : 'pill-low'}">${esc(t)}</span>`;
+  const countThreat = (arr, t) => arr.filter((d) => d.threat === t).length;
+
+  /* Component 1 — Global administrators (point-in-time membership + changes) */
+  function renderGovGlobalAdmins() {
+    const ga = govCache.ga;
+    const inv = govCache.roleInv;
+    const changes = govCache.gaChanges;
+    const over = ga.length > 5;
+    const members = ga.map((m) => `<tr><td><div class="cell-name">${esc(m.member)}</div><div class="cell-sub">${esc(m.upn)}</div></td><td>${esc(m.assignmentType || 'Assigned')}</td></tr>`).join('');
+    const changeRows = changes.slice(0, 6).map((c) => `<tr>
+        <td>${/add/i.test(c.activity) ? pill('high', 'Added') : pill('low', 'Removed')}</td>
+        <td><div class="cell-name">${esc(c.member)}</div></td>
+        <td class="muted nowrap">${ago(c.dateTime)}</td></tr>`).join('');
+    el('gb-ga').innerHTML = `
+      <div class="ga-head">
+        <div class="ga-num ${over ? 'over' : ''}">${ga.length}<small>Global Admins</small></div>
+        <div class="ga-note">${over
+          ? `<span class="warn">⚠ Above Microsoft's recommended maximum of 5.</span> Reduce standing access and use PIM eligibility.`
+          : `Within the recommended limit (≤5). Keep standing access minimal.`}</div>
+      </div>
+      <div class="split" style="margin-top:6px">
+        <div style="flex:1;min-width:200px">
+          <h4 class="sub-h">Members</h4>
+          <div class="tbl-scroll" style="max-height:200px"><table class="tbl"><tbody>${members || emptyRow(2)}</tbody></table></div>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <h4 class="sub-h">Recent Global Admin changes</h4>
+          <div class="tbl-scroll" style="max-height:200px"><table class="tbl"><tbody>${changeRows || emptyRow(3)}</tbody></table></div>
+        </div>
+      </div>
+      <h4 class="sub-h" style="margin-top:12px">Privileged role inventory</h4>
+      ${Charts.hbar(inv.map((d, i) => ({ ...d, color: privPillClass(d.label) === 'pill-high' ? RISK.high : Charts.PALETTE[i % Charts.PALETTE.length] })))}`;
+  }
+
+  /* Component 2 — New privileged role assignments */
+  function renderGovPriv() {
+    renderGovBody('priv', govCache.priv, [
+      { h: 'Member', c: (r) => `<div class="cell-name">${esc(r.member)}</div>` },
+      { h: 'Role', c: (r) => `<span class="pill ${privPillClass(r.role)}">${esc(r.role)}</span>` },
+      { h: 'Initiated by', c: (r) => `<div class="cell-sub">${esc(r.actor || '—')}</div>` },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.member, r.role, r.actor], { noun: 'assignments' });
+  }
+
+  /* Component 3 — Conditional Access changes */
+  function renderGovCA() {
+    renderGovBody('ca', govCache.ca, [
+      { h: 'Policy', c: (r) => `<div class="cell-name">${esc(r.policy || '—')}</div>${r.change ? `<div class="cell-sub">${esc(r.change)}</div>` : ''}` },
+      { h: 'Operation', c: (r) => `<span class="muted">${esc(r.activity.replace(' conditional access policy', ''))}</span>` },
+      { h: 'Initiated by', c: (r) => `<div class="cell-sub">${esc(r.actor || '—')}</div>` },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.policy, r.change, r.actor, r.activity], { noun: 'changes' });
+  }
+
+  /* Component 4 — SharePoint sharing policy changes */
+  function renderGovSharing() {
+    renderGovBody('sharing', govCache.sharing, [
+      { h: 'Change', c: (r) => `<div class="cell-name">${esc(r.activity)}</div><div class="cell-sub">${esc(r.change || '')}</div>` },
+      { h: 'Service', c: (r) => `<span class="muted">${esc(r.service)}</span>` },
+      { h: 'Initiated by', c: (r) => `<div class="cell-sub">${esc(r.actor || '—')}</div>` },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.activity, r.change, r.actor], { noun: 'changes' });
+  }
+
+  /* Component 5 — New external users */
+  function renderGovExternal() {
+    renderGovBody('external', govCache.external, [
+      { h: 'External user', c: (r) => `<div class="cell-name">${esc(r.email)}</div>` },
+      { h: 'Invited as', c: (r) => `<div class="cell-sub">${esc(trunc(r.target || '', 32))}</div>` },
+      { h: 'Invited by', c: (r) => `<div class="cell-sub">${esc(r.actor || '—')}</div>` },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.email, r.target, r.actor], { noun: 'users' });
+  }
+
+  /* Component 6 — Anonymous sharing links */
+  function renderGovAnon() {
+    renderGovBody('anon', govCache.anon, [
+      { h: 'Resource', c: (r) => `<div class="cell-name">${esc(r.resource)}</div>` },
+      { h: 'Link', c: (r) => `<span class="pill ${r.linkType === 'Edit' ? 'pill-high' : 'pill-low'}">${esc(r.linkType || 'View')}</span>` },
+      { h: 'Service', c: (r) => `<span class="muted">${esc(r.service)}</span>` },
+      { h: 'Created by', c: (r) => `<div class="cell-sub">${esc(r.actor || '—')}</div>` },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.resource, r.actor, r.service], { noun: 'links' });
+  }
+
+  /* Component 7 — Mail forwarding rules */
+  function renderGovForward() {
+    renderGovBody('forward', govCache.forward, [
+      { h: 'Mailbox', c: (r) => `<div class="cell-name">${esc(r.actor || '—')}</div>` },
+      { h: 'Forwards to', c: (r) => `<div class="cell-name">${esc(r.forwardTo || '')}</div>` },
+      { h: 'Scope', c: (r) => r.external ? pill('high', 'External') : pill('low', 'Internal') },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.actor, r.forwardTo], { noun: 'rules' });
+  }
+
+  /* Component 8 — OAuth app consents */
+  function renderGovOAuth() {
+    renderGovBody('oauth', govCache.oauth, [
+      { h: 'Application', c: (r) => `<div class="cell-name">${esc(r.app)}</div><div class="cell-sub">${esc(r.consentType || '')}</div>` },
+      { h: 'Permissions', c: (r) => `<div class="perm-tags">${(r.permissions || []).map((p) => `<span class="perm ${/readwrite|\.all|full_access|directory|mail\.|files\./i.test(p) ? 'perm-risk' : ''}">${esc(p)}</span>`).join('') || '—'}</div>` },
+      { h: 'Risk', c: (r) => r.risky ? pill('high', 'High') : pill('low', 'Low') },
+      { h: 'When', c: (r) => `<span class="muted nowrap">${ago(r.dateTime)}</span>` },
+    ], (r) => [r.app, (r.permissions || []).join(' '), r.actor], { noun: 'consents' });
+  }
+
+  /* Component 9 — Defender phishing / malware trends */
+  function renderGovDefender() {
+    const all = govCache.defender;
+    const q = (govFilters.defender || '').trim().toLowerCase();
+    const rows = q ? all.filter((d) => [d.sender, d.subject, d.recipient, d.recipientName, d.threat, d.malwareFamily].some((f) => String(f || '').toLowerCase().includes(q))) : all;
+    const series = Analytics.dailySeries(rows, rangeDays(), () => true);
+    const delivered = rows.filter((d) => d.delivered).length;
+    const table = rows.slice(0, 150).map((d) => `<tr>
+        <td class="muted nowrap">${fmtDate(d.dateTime)}</td>
+        <td>${threatPill(d.threat)}</td>
+        <td><div class="cell-name">${esc(trunc(d.subject, 46))}</div><div class="cell-sub">${esc(d.sender)}</div></td>
+        <td>${esc(d.recipientName || d.recipient)}</td>
+        <td>${d.delivered ? pill('high', 'Delivered') : pill('low', esc(d.delivery || 'Blocked'))}</td>
+      </tr>`).join('');
+    el('gb-defender').innerHTML = `
+      <div class="widget-summary">
+        ${chipCount('Phish', countThreat(rows, 'Phish'), RISK.high)}
+        ${chipCount('Malware', countThreat(rows, 'Malware'), RISK.medium)}
+        ${chipCount('Spam', countThreat(rows, 'Spam'), RISK.low)}
+        ${chipCount('Delivered', delivered, RISK.high)}
+        <span class="muted">Blocked vs delivered email threats over the selected range</span>
+      </div>
+      <div class="grid cols-3">
+        <div class="sub-card"><h4>Daily volume</h4>${Charts.vbar(series.map((s) => ({ ...s, color: RISK.high })), { width: 380, height: 180 })}</div>
+        <div class="sub-card"><h4>By type</h4>${Charts.donut(threatBreakdown(rows), { centerLabel: 'threats', size: 150 })}</div>
+        <div class="sub-card"><h4>Top targeted users</h4>${Charts.hbar(Analytics.topBy(rows, (d) => d.recipientName || d.recipient, 6).map((x) => ({ ...x, color: RISK.medium })))}</div>
+      </div>
+      <div class="tbl-scroll" style="margin-top:12px"><table class="tbl"><thead><tr><th>Time (UTC)</th><th>Type</th><th>Subject / sender</th><th>Recipient</th><th>Delivery</th></tr></thead><tbody>${table || emptyRow(5)}</tbody></table></div>`;
+    setCount('gc-defender', rows.length, all.length, 'emails');
+  }
+
+  function wireGovernance() {
+    computeGov();
+    renderGovGlobalAdmins();
+    renderGovPriv(); renderGovCA(); renderGovSharing(); renderGovExternal();
+    renderGovAnon(); renderGovForward(); renderGovOAuth(); renderGovDefender();
+    const onSearch = (id, fn) => {
+      const e = el('gf-' + id); if (!e) return; let t;
+      e.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { govFilters[id] = e.value; fn(); }, 150); });
+    };
+    onSearch('priv', renderGovPriv); onSearch('ca', renderGovCA); onSearch('sharing', renderGovSharing);
+    onSearch('external', renderGovExternal); onSearch('anon', renderGovAnon); onSearch('forward', renderGovForward);
+    onSearch('oauth', renderGovOAuth); onSearch('defender', renderGovDefender);
+  }
+
+  /* ---------------------------------------------------------------------- */
   /* Audit logs — searchable interface                                       */
   /* ---------------------------------------------------------------------- */
   const auditState = { q: '', service: '', result: '', sort: 'dateTime', dir: -1, page: 0, size: 25 };
 
   function viewAudit() {
-    const services = [...new Set(state.audit.map((a) => a.service).filter(Boolean))].sort();
+    const services = [...new Set(sigCache.audit.map((a) => a.service).filter(Boolean))].sort();
     return `
       ${header('Audit Logs', 'Directory & Microsoft 365 activity — search and drill down')}
       ${card('', `
@@ -418,7 +758,7 @@
 
   function filteredAudit() {
     const q = auditState.q.trim().toLowerCase();
-    let rows = state.audit.filter((a) => {
+    let rows = sigCache.audit.filter((a) => {
       if (auditState.service && a.service !== auditState.service) return false;
       if (auditState.result && a.result !== auditState.result) return false;
       if (!q) return true;
@@ -550,7 +890,7 @@
       ${card('Reference — KQL used for Log Analytics', `
         <p class="muted">These are the queries this dashboard runs against your workspace. You can also paste their JSON output via the upload panel.</p>
         <div class="kql-tabs">
-          ${Object.entries({ 'Sign-ins': 'signins', 'Risky sign-ins': 'riskySignins', 'Risky users': 'riskyUsers', 'Audit logs': 'audit' })
+          ${Object.entries({ 'Sign-ins': 'signins', 'Risky sign-ins': 'riskySignins', 'Risky users': 'riskyUsers', 'Audit logs': 'audit', 'Privileged roles': 'privRoles', 'Defender threats': 'defender' })
             .map(([label, k], i) => `<button class="kql-tab ${i === 0 ? 'active' : ''}" data-kql="${k}">${label}</button>`).join('')}
         </div>
         <pre id="kql-view" class="raw-json kql-view">${esc(LogAnalytics.KQL.signins('30d').trim())}</pre>`)}
@@ -614,7 +954,7 @@
       reader.readAsText(file);
     });
   }
-  const kindLabel = (k) => ({ signins: 'Sign-in logs', audit: 'Audit logs', riskyUsers: 'Risky users', riskySignins: 'Risky sign-ins' }[k] || k);
+  const kindLabel = (k) => ({ signins: 'Sign-in logs', audit: 'Audit logs', riskyUsers: 'Risky users', riskySignins: 'Risky sign-ins', privRoles: 'Privileged roles', defender: 'Defender threats' }[k] || k);
 
   /* ---------------------------------------------------------------------- */
   /* Small render helpers                                                     */
@@ -651,6 +991,7 @@
   const countAuditFail = () => state.audit.filter((a) => a.result === 'failure').length;
   const pctOf = (n, total) => total ? Math.round((n / total) * 100) + '%' : '0%';
   const humanize = (s) => String(s || '').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
+  const trunc = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n - 1) + '…' : s; };
 
   function setStatus(msg) { const b = el('status'); if (b) { b.textContent = msg; b.style.display = msg ? 'block' : 'none'; } }
   function err(e) { setStatus(''); console.error(e); alert('Error loading data: ' + e.message); }

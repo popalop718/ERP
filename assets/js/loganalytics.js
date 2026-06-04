@@ -71,6 +71,30 @@ AuditLogs
           Result, ResultReason, InitiatedBy, TargetResources, CorrelationId, Id
 | order by TimeGenerated desc
 | take 50000`,
+
+    // Privileged role membership (point-in-time). Requires Sentinel UEBA
+    // (IdentityInfo). Alternatively source this from Microsoft Graph
+    // (/directoryRoles/{id}/members) and upload as JSON.
+    privRoles: () => `
+IdentityInfo
+| summarize arg_max(TimeGenerated, *) by AccountUPN
+| mv-expand AssignedRole = AssignedRoles to typeof(string)
+| where isnotempty(AssignedRole)
+| project roleDisplayName = AssignedRole,
+          principalDisplayName = AccountDisplayName,
+          principalUserPrincipalName = AccountUPN,
+          assignmentType = "Assigned", createdDateTime = TimeGenerated`,
+
+    // Microsoft Defender for Office 365 email threats (advanced hunting).
+    defender: (range = '30d') => `
+EmailEvents
+| where Timestamp > ago(${range})
+| where ThreatTypes has_any ('Phish', 'Malware', 'Spam')
+| project Timestamp, NetworkMessageId, RecipientEmailAddress, SenderFromAddress,
+          SenderDisplayName, Subject, ThreatTypes, DetectionMethods,
+          DeliveryAction, DeliveryLocation
+| order by Timestamp desc
+| take 50000`,
   };
 
   /* Run one KQL query against the workspace. Returns the raw API response. */
@@ -95,12 +119,14 @@ AuditLogs
     const run = (kql, kind) => query(workspaceId, token, kql)
       .then((r) => Parsers.fromLogAnalytics(r, kind));
 
-    const [si, ni, rs, ru, au] = await Promise.all([
+    const [si, ni, rs, ru, au, pr, df] = await Promise.all([
       run(KQL.signins(range), 'signins'),
       run(KQL.nonInteractive(range), 'signins').catch(() => []), // table may be absent
       run(KQL.riskySignins(range), 'signins'),
       run(KQL.riskyUsers('90d'), 'riskyUsers'),
       run(KQL.audit(range), 'audit'),
+      run(KQL.privRoles(), 'privRoles').catch(() => []),   // requires UEBA / IdentityInfo
+      run(KQL.defender(range), 'defender').catch(() => []), // requires Defender for O365
     ]);
 
     const signinRows = si.concat(ni);
@@ -109,6 +135,8 @@ AuditLogs
       riskySignins: Parsers.normalizeRiskySignIns(rs),
       riskyUsers: Parsers.normalizeRiskyUsers(ru),
       audit: Parsers.normalizeAudit(au),
+      privRoles: Parsers.normalizePrivilegedRoles(pr),
+      defender: Parsers.normalizeDefender(df),
     };
   }
 

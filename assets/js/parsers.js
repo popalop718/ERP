@@ -165,6 +165,49 @@
     }).filter((a) => !isNaN(a.dateTime));
   }
 
+  /* ---- Privileged role membership (point-in-time) ----------------------- */
+  function normalizePrivilegedRoles(raw) {
+    return rowsFrom(raw).map((r, idx) => ({
+      id: get(r, ['id'], 'pr' + idx),
+      role: get(r, ['roleDisplayName', 'AdditionalProperties.RoleName', 'Role', 'roleName', 'DisplayName']),
+      member: get(r, ['principalDisplayName', 'PrincipalDisplayName', 'User', 'AccountDisplayName']),
+      upn: get(r, ['principalUserPrincipalName', 'PrincipalUPN', 'AccountUPN', 'userPrincipalName']),
+      principalType: get(r, ['principalType', 'PrincipalType'], 'User'),
+      assignmentType: get(r, ['assignmentType', 'AssignmentType', 'MemberType'], 'Assigned'),
+      created: new Date(get(r, ['createdDateTime', 'CreatedDateTime', 'AssignedDateTime'])),
+      raw: r,
+    }));
+  }
+
+  /* ---- Defender for Office 365 email threats (EmailEvents schema) -------- */
+  function normalizeDefender(raw) {
+    return rowsFrom(raw).map((r, idx) => {
+      const threatRaw = String(get(r, ['ThreatTypes', 'threatType', 'Verdict', 'ThreatType'], '')).toLowerCase();
+      const threat = threatRaw.includes('mal') ? 'Malware'
+        : threatRaw.includes('phish') ? 'Phish'
+        : threatRaw.includes('spam') ? 'Spam' : (threatRaw ? 'Phish' : 'Phish');
+      const delivery = get(r, ['DeliveryAction', 'deliveryAction', 'LatestDeliveryAction'], '');
+      const sender = get(r, ['SenderFromAddress', 'SenderMailFromAddress', 'sender', 'P1Sender'], '');
+      return {
+        id: get(r, ['NetworkMessageId', 'id'], 'd' + idx),
+        dateTime: new Date(get(r, ['Timestamp', 'TimeGenerated', 'ReceivedTime', 'dateTime'])),
+        recipient: get(r, ['RecipientEmailAddress', 'recipient', 'RecipientObjectId']),
+        recipientName: get(r, ['RecipientDisplayName', 'recipientName']),
+        sender,
+        senderDomain: get(r, ['SenderFromDomain', 'senderDomain']) || (sender.split('@')[1] || ''),
+        subject: get(r, ['Subject', 'subject']),
+        threat,
+        malwareFamily: get(r, ['MalwareFamily', 'malwareFamily']),
+        detection: get(r, ['DetectionMethods', 'DetectionMethod', 'detection']),
+        delivery,
+        delivered: /deliver/i.test(delivery),
+        severity: norm(get(r, ['Severity', 'severity'], 'medium')) === 'none' ? 'medium' : norm(get(r, ['Severity', 'severity'], 'medium')),
+        url: get(r, ['Url', 'Urls', 'url']),
+        raw: r,
+      };
+    }).filter((d) => !isNaN(d.dateTime));
+  }
+
   function norm(v) {
     const s = String(v || 'none').toLowerCase();
     if (s.includes('high')) return 'high';
@@ -227,12 +270,16 @@
   /* Detect record type from a parsed JSON/CSV blob (best-effort). */
   function detectType(raw, filename = '') {
     const f = filename.toLowerCase();
+    if (f.includes('defender') || f.includes('email') || f.includes('phish') || f.includes('malware')) return 'defender';
+    if (f.includes('priv') || f.includes('role') || f.includes('admin')) return 'privRoles';
     if (f.includes('audit')) return 'audit';
     if (f.includes('risky') && f.includes('user')) return 'riskyUsers';
     if ((f.includes('risky') && f.includes('sign')) || f.includes('risk-sign')) return 'riskySignins';
     if (f.includes('signin') || f.includes('sign-in') || f.includes('sign in')) return 'signins';
     const sample = rowsFrom(raw)[0] || {};
     const keys = Object.keys(sample).map((k) => k.toLowerCase());
+    if (keys.some((k) => k.includes('threattypes') || k === 'malwarefamily' || k.includes('deliveryaction'))) return 'defender';
+    if (keys.some((k) => k.includes('roledisplayname') || k.includes('principaldisplayname'))) return 'privRoles';
     if (keys.some((k) => k.includes('activitydisplayname') || k === 'operation' || k.includes('loggedbyservice'))) return 'audit';
     if (keys.includes('risklevel') && !keys.some((k) => k.includes('signin') || k.includes('ipaddress'))) return 'riskyUsers';
     if (keys.some((k) => k.includes('signin') || k.includes('clientappused') || k.includes('ipaddress'))) return 'signins';
@@ -242,6 +289,7 @@
   global.Parsers = {
     parseCSV, rowsFrom, isLegacyClient, fromLogAnalytics,
     normalizeSignIns, normalizeRiskyUsers, normalizeRiskySignIns, normalizeAudit,
+    normalizePrivilegedRoles, normalizeDefender,
     detectType,
   };
 })(window);

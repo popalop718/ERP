@@ -1,9 +1,13 @@
-# Show-back Dashboard — Entra ID & M365 Sign-in / Audit Logs
+# Auth & Audit Hub — Entra ID & M365 Security Dashboard
 
-A self-contained security **show-back dashboard** that visualises sign-in and
-audit data exported from **Microsoft Entra ID (Azure AD)** and **Microsoft 365**.
-It works against a live **Azure Log Analytics workspace** (where these logs are
-ingested), uploaded export files, or bundled sample data.
+A self-contained security dashboard that visualises sign-in, audit, identity-
+governance and threat data from **Microsoft Entra ID (Azure AD)**, **Microsoft
+365** and **Microsoft Defender for Office 365**. It works against a live
+**Azure Log Analytics workspace** (where these logs are ingested), uploaded
+export files, or bundled sample data.
+
+A **global date-range filter** (24h / 7d / 30d / 90d / custom) sits at the top
+of every view and re-renders all widgets in real time.
 
 No build step, no runtime dependencies — plain HTML/CSS/JS with hand-rolled SVG
 charts, so it runs anywhere a browser can open a file.
@@ -41,6 +45,27 @@ breakdown, and the top users flagged for unusual activity.
    and daily trend. These bypass modern auth/MFA and should be blocked via
    Conditional Access.
 
+Every widget also has its own filter controls (severity, risk level, protocol,
+detection type, free-text search) that refine just that widget.
+
+### Governance & Threats
+Nine components covering privileged access, tenant-configuration drift and email
+threats — all respecting the global date range, each with its own search box:
+
+1. **Global Admin count** — standing Global Administrator membership with a
+   ≤5 recommendation, member list, recent role changes and a privileged-role
+   inventory chart.
+2. **New privileged role assignments** — members added to privileged directory roles.
+3. **Conditional Access changes** — CA policies added, updated or deleted.
+4. **SharePoint sharing policy changes** — tenant external-sharing configuration.
+5. **New external users** — B2B guest invitations / `#EXT#` accounts.
+6. **Anonymous sharing links created** — anyone-with-the-link files (SharePoint/OneDrive).
+7. **Mail forwarding rules** — inbox rules & mailbox forwarding, flagged internal vs external.
+8. **OAuth app consents** — delegated & application permission grants, with risky
+   permissions highlighted.
+9. **Defender phishing/malware trends** — daily volume, breakdown by threat type,
+   most-targeted users and a blocked-vs-delivered table.
+
 ### Audit Logs
 A searchable, sortable, paginated interface over directory & M365 audit events.
 Free-text search across activity, user, target, IP, category and reason; filter
@@ -66,7 +91,11 @@ The four datasets typically live in these workspace tables:
 | Sign-ins | `SigninLogs`, `AADNonInteractiveUserSignInLogs` |
 | Risky sign-ins | `SigninLogs` (filtered on risk) |
 | Risky users | `AADRiskyUsers` |
-| Audit logs | `AuditLogs` (and `OfficeActivity` for M365) |
+| Audit / governance | `AuditLogs` (and `OfficeActivity` for M365 — sharing, anonymous links, forwarding) |
+| Privileged roles | `IdentityInfo` (Sentinel UEBA) or Microsoft Graph `directoryRoles` |
+| Defender threats | `EmailEvents` (Defender for O365 advanced hunting) |
+
+The exact KQL for each is shown on the **Data Source → Reference** tab.
 
 Enter your **Workspace ID** and a **bearer token** scoped to the Log Analytics
 API. Get a token with:
@@ -96,11 +125,13 @@ The parser normalises all of the following into one internal schema:
 index.html                     app shell
 assets/css/styles.css          dark security-console theme
 assets/js/charts.js            dependency-free SVG charts (bar / column / donut)
-assets/js/parsers.js           ingest & normalize Entra/M365/Log Analytics data
+assets/js/parsers.js           ingest & normalize Entra/M365/Defender/Log Analytics data
 assets/js/analytics.js         behavioural anomaly detection & aggregations
+assets/js/governance.js        governance/threat classification over audit logs
 assets/js/loganalytics.js      Log Analytics REST client + canonical KQL
-assets/js/app.js               views, routing, widgets, audit search
-data/*.json                    bundled sample data
+assets/js/app.js               views, routing, widgets, global date range, search
+data/*.json                    bundled sample data (sign-ins, audit, risky users/
+                               sign-ins, privileged roles, Defender events)
 scripts/generate-sample-data.mjs   regenerate sample data
 scripts/serve.mjs              zero-dependency static server
 ```
