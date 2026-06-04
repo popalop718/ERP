@@ -128,6 +128,15 @@ body { background: var(--bg); color: var(--text); font-size: 14px; line-height: 
 .flag-stats { display: flex; flex-wrap: wrap; gap: 6px 12px; padding-top: 10px; border-top: 1px solid var(--line);
   color: var(--muted2); font-size: 11px; }
 
+/* ---- Per-widget filter toolbars ---- */
+.widget-filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.filter-sel.sm { padding: 6px 10px; font-size: 12.5px; border-radius: 8px; }
+.search-box.sm { flex: 0 1 200px; min-width: 150px; }
+.search-box.sm input { padding: 6px 10px 6px 30px; font-size: 12.5px; }
+.search-box.sm .search-icon { font-size: 14px; left: 10px; }
+.filter-count { margin-left: auto; font-size: 11.5px; white-space: nowrap; }
+
 /* ---- Tables ---- */
 .split { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
 .split > .ch-donut-wrap { flex: 0 0 auto; }

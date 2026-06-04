@@ -81,6 +81,9 @@
         .filter((s) => s.riskLevel !== 'none' || s.riskState === 'atRisk')
         .map((s) => ({ ...s, isRisky: true }));
     }
+    // Reset per-widget filters & cached analytics for the freshly loaded data.
+    signinFilters = SIGNIN_FILTER_DEFAULTS();
+    delete sigCache.unusual;
     render();
     setStatus('');
   }
@@ -103,7 +106,7 @@
     const v = state.view;
     const body = el('view');
     if (v === 'overview') body.innerHTML = viewOverview();
-    else if (v === 'signins') body.innerHTML = viewSignins();
+    else if (v === 'signins') { body.innerHTML = viewSignins(); wireSignins(); }
     else if (v === 'audit') { body.innerHTML = viewAudit(); wireAudit(); }
     else if (v === 'source') { body.innerHTML = viewSource(); wireSource(); }
   }
@@ -175,12 +178,50 @@
       ${widgetLegacy()}`;
   }
 
+  /* Per-widget filter state (persists while navigating; reset on data load) */
+  const SIGNIN_FILTER_DEFAULTS = () => ({
+    unusual: { severity: 'all', q: '' },
+    riskyUsers: { level: 'all', state: 'all', q: '' },
+    riskySignins: { level: 'all', detail: 'all', q: '' },
+    legacy: { proto: 'all', result: 'all', q: '' },
+  });
+  let signinFilters = SIGNIN_FILTER_DEFAULTS();
+  const sigCache = {};
+
+  /* Filter-control builders */
+  function fSel(id, value, opts) {
+    return `<select id="${id}" class="filter-sel sm">` +
+      opts.map(([v, l]) => `<option value="${esc(v)}" ${value === v ? 'selected' : ''}>${esc(l)}</option>`).join('') +
+      `</select>`;
+  }
+  function fSearch(id, value, ph) {
+    return `<div class="search-box sm"><span class="search-icon">⌕</span>
+      <input id="${id}" type="search" placeholder="${esc(ph)}" value="${esc(value)}" autocomplete="off"/></div>`;
+  }
+  const distinct = (arr, fn) => [...new Set(arr.map(fn).filter(Boolean))].sort();
+  const matches = (q, ...fields) => { q = q.trim().toLowerCase(); return !q || fields.some((f) => String(f || '').toLowerCase().includes(q)); };
+  function setCount(id, shown, total, noun) { const e = el(id); if (e) e.textContent = `${fmtNum(shown)} of ${fmtNum(total)} ${noun}`; }
+
   /* Widget 1 — Unusual sign-in activity ---------------------------------- */
   function widgetUnusual() {
-    const unusual = Analytics.unusualActivity(state.signins);
+    const f = signinFilters.unusual;
+    return cardWide('Unusual sign-in activity',
+      `<div class="widget-filters">
+         ${fSel('fu-sev', f.severity, [['all', 'All severities'], ['high', 'High'], ['medium', 'Medium'], ['low', 'Low']])}
+         ${fSearch('fu-q', f.q, 'Filter by user…')}
+         <span id="fu-count" class="filter-count muted"></span>
+       </div>
+       <div id="unusual-body"></div>`,
+      'Impossible travel, password spray, off-hours bursts, new geographies, legacy auth & Identity Protection signals');
+  }
+  function renderUnusualBody() {
+    const all = sigCache.unusual || (sigCache.unusual = Analytics.unusualActivity(state.signins));
     const counts = { high: 0, medium: 0, low: 0 };
-    unusual.forEach((u) => counts[u.severity]++);
-    const cards = unusual.slice(0, 12).map((u) => `
+    all.forEach((u) => counts[u.severity]++);
+    const f = signinFilters.unusual;
+    let list = all.filter((u) => f.severity === 'all' || u.severity === f.severity);
+    if (f.q.trim()) list = list.filter((u) => matches(f.q, u.user, u.upn));
+    const cards = list.slice(0, 24).map((u) => `
       <div class="flag-card sev-${u.severity}">
         <div class="flag-head">
           <span class="sev-dot" style="background:${sevColor(u.severity)}"></span>
@@ -197,24 +238,38 @@
           <span>last ${ago(u.stats.lastSeen)}</span>
         </div>
       </div>`).join('');
-
-    return cardWide(
-      'Unusual sign-in activity',
+    el('unusual-body').innerHTML =
       `<div class="widget-summary">
          ${chipCount('High', counts.high, RISK.high)}
          ${chipCount('Medium', counts.medium, RISK.medium)}
          ${chipCount('Low', counts.low, RISK.low)}
          <span class="muted">Behavioural anomaly scoring across ${fmtNum(state.signins.length)} sign-ins</span>
        </div>
-       <div class="flag-grid">${cards || '<div class="ch-empty">No anomalies detected</div>'}</div>`,
-      'Impossible travel, password spray, off-hours bursts, new geographies, legacy auth & Identity Protection signals'
-    );
+       <div class="flag-grid">${cards || '<div class="ch-empty">No users match this filter</div>'}</div>`;
+    setCount('fu-count', list.length, all.length, 'users');
   }
 
   /* Widget 2 — Risky users ----------------------------------------------- */
   function widgetRiskyUsers() {
-    const u = [...state.riskyUsers].sort((a, b) => lvlRank(b.riskLevel) - lvlRank(a.riskLevel));
-    const rows = u.slice(0, 12).map((r) => `
+    const f = signinFilters.riskyUsers;
+    const states = distinct(state.riskyUsers, (r) => r.riskState);
+    return card('Risky users',
+      `<div class="widget-filters">
+         ${fSel('fru-level', f.level, [['all', 'All risk'], ['high', 'High'], ['medium', 'Medium'], ['low', 'Low']])}
+         ${fSel('fru-state', f.state, [['all', 'Any state'], ...states.map((s) => [s, humanize(s)])])}
+         ${fSearch('fru-q', f.q, 'Filter user…')}
+         <span id="fru-count" class="filter-count muted"></span>
+       </div>
+       <div id="ru-body"></div>`,
+      'Identity Protection aggregate risk per user');
+  }
+  function renderRiskyUsersBody() {
+    const f = signinFilters.riskyUsers;
+    let u = [...state.riskyUsers].sort((a, b) => lvlRank(b.riskLevel) - lvlRank(a.riskLevel));
+    if (f.level !== 'all') u = u.filter((r) => r.riskLevel === f.level);
+    if (f.state !== 'all') u = u.filter((r) => r.riskState === f.state);
+    if (f.q.trim()) u = u.filter((r) => matches(f.q, r.user, r.upn));
+    const rows = u.slice(0, 250).map((r) => `
       <tr>
         <td><div class="cell-name">${esc(r.user)}</div><div class="cell-sub">${esc(r.upn)}</div></td>
         <td>${pill(r.riskLevel)}</td>
@@ -222,17 +277,34 @@
         <td class="muted nowrap">${r.lastUpdated && !isNaN(r.lastUpdated) ? ago(r.lastUpdated) : '—'}</td>
       </tr>`).join('');
     const chart = Charts.donut(riskBreakdown(u, 'riskLevel'), { centerLabel: 'users', size: 150 });
-    return card(`Risky users <span class="count-chip">${u.length}</span>`,
+    el('ru-body').innerHTML =
       `<div class="split">${chart}
         <div class="tbl-scroll"><table class="tbl"><thead><tr><th>User</th><th>Risk</th><th>State</th><th>Updated</th></tr></thead>
-        <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`,
-      'Identity Protection aggregate risk per user');
+        <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`;
+    setCount('fru-count', u.length, state.riskyUsers.length, 'users');
   }
 
   /* Widget 3 — Risky sign-ins -------------------------------------------- */
   function widgetRiskySignins() {
-    const rs = [...state.riskySignins].sort((a, b) => b.dateTime - a.dateTime);
-    const rows = rs.slice(0, 12).map((r) => `
+    const f = signinFilters.riskySignins;
+    const details = distinct(state.riskySignins, (r) => r.riskDetail).filter((d) => d && d !== 'none');
+    return card('Risky sign-ins',
+      `<div class="widget-filters">
+         ${fSel('frs-level', f.level, [['all', 'All risk'], ['high', 'High'], ['medium', 'Medium'], ['low', 'Low']])}
+         ${fSel('frs-detail', f.detail, [['all', 'Any detection'], ...details.map((d) => [d, humanize(d)])])}
+         ${fSearch('frs-q', f.q, 'Filter user / IP…')}
+         <span id="frs-count" class="filter-count muted"></span>
+       </div>
+       <div id="rs-body"></div>`,
+      'Sign-ins flagged at-risk by Identity Protection');
+  }
+  function renderRiskySigninsBody() {
+    const f = signinFilters.riskySignins;
+    let rs = [...state.riskySignins].sort((a, b) => b.dateTime - a.dateTime);
+    if (f.level !== 'all') rs = rs.filter((r) => r.riskLevel === f.level);
+    if (f.detail !== 'all') rs = rs.filter((r) => r.riskDetail === f.detail);
+    if (f.q.trim()) rs = rs.filter((r) => matches(f.q, r.user, r.upn, r.ip, r.location));
+    const rows = rs.slice(0, 250).map((r) => `
       <tr>
         <td><div class="cell-name">${esc(r.user)}</div><div class="cell-sub">${esc(r.location || r.ip)}</div></td>
         <td>${pill(r.riskLevel)}</td>
@@ -240,24 +312,42 @@
         <td class="muted nowrap">${ago(r.dateTime)}</td>
       </tr>`).join('');
     const chart = Charts.donut(riskBreakdown(rs, 'riskLevel'), { centerLabel: 'sign-ins', size: 150 });
-    return card(`Risky sign-ins <span class="count-chip">${rs.length}</span>`,
+    el('rs-body').innerHTML =
       `<div class="split">${chart}
         <div class="tbl-scroll"><table class="tbl"><thead><tr><th>User / source</th><th>Risk</th><th>Detection</th><th>When</th></tr></thead>
-        <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`,
-      'Sign-ins flagged at-risk by Identity Protection');
+        <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`;
+    setCount('frs-count', rs.length, state.riskySignins.length, 'sign-ins');
   }
 
   /* Widget 4 — Legacy sign-in attempts ----------------------------------- */
   function widgetLegacy() {
-    const legacy = state.signins.filter((s) => s.isLegacy);
+    const f = signinFilters.legacy;
+    const protos = distinct(state.signins.filter((s) => s.isLegacy), (s) => s.clientApp || 'Unknown');
+    return cardWide('Legacy authentication attempts',
+      `<div class="widget-filters">
+         ${fSel('fl-proto', f.proto, [['all', 'All protocols'], ...protos.map((p) => [p, p])])}
+         ${fSel('fl-result', f.result, [['all', 'Any result'], ['success', 'Success'], ['failure', 'Failure']])}
+         ${fSearch('fl-q', f.q, 'Filter user…')}
+         <span id="fl-count" class="filter-count muted"></span>
+       </div>
+       <div id="legacy-body"></div>`,
+      'Detected via client app (IMAP/POP/SMTP/ActiveSync/MAPI) and legacy user agents');
+  }
+  function renderLegacyBody() {
+    const f = signinFilters.legacy;
+    const allLegacy = state.signins.filter((s) => s.isLegacy);
+    const pass = (s) =>
+      (f.proto === 'all' || (s.clientApp || 'Unknown') === f.proto) &&
+      (f.result === 'all' || (f.result === 'success' ? s.success : !s.success)) &&
+      (!f.q.trim() || matches(f.q, s.user, s.upn));
+    const legacy = allLegacy.filter(pass);
     const byProto = Analytics.topBy(legacy, (s) => s.clientApp || 'Unknown', 8);
-    const byUser = Analytics.topBy(legacy, (s) => s.user || s.upn, 8)
-      .map((d) => ({ ...d, meta: 'legacy attempts' }));
-    const series = Analytics.dailySeries(state.signins, 30, (s) => s.isLegacy);
+    const byUser = Analytics.topBy(legacy, (s) => s.user || s.upn, 8);
+    const series = Analytics.dailySeries(legacy, 30, () => true);
     const failed = legacy.filter((s) => !s.success).length;
-    return cardWide(`Legacy authentication attempts`,
+    el('legacy-body').innerHTML =
       `<div class="widget-summary">
-         ${chipCount('Total', legacy.length, RISK.high)}
+         ${chipCount('Attempts', legacy.length, RISK.high)}
          ${chipCount('Failed', failed, RISK.medium)}
          ${chipCount('Users', new Set(legacy.map((s) => s.upn)).size, RISK.low)}
          <span class="muted">Legacy protocols bypass modern auth & MFA — block via Conditional Access</span>
@@ -266,8 +356,34 @@
          <div class="sub-card"><h4>By protocol</h4>${Charts.hbar(byProto.map((d, i) => ({ ...d, color: Charts.PALETTE[i % Charts.PALETTE.length] })))}</div>
          <div class="sub-card"><h4>Top users</h4>${Charts.hbar(byUser.map((d) => ({ ...d, color: RISK.medium })))}</div>
          <div class="sub-card"><h4>Daily trend</h4>${Charts.vbar(series.map((d) => ({ ...d, color: RISK.high })), { width: 380, height: 180 })}</div>
-       </div>`,
-      'Detected via client app (IMAP/POP/SMTP/ActiveSync/MAPI) and legacy user agents');
+       </div>`;
+    setCount('fl-count', legacy.length, allLegacy.length, 'attempts');
+  }
+
+  /* Wire all sign-in widget filters after the view is rendered ------------ */
+  function wireSignins() {
+    sigCache.unusual = Analytics.unusualActivity(state.signins);
+    renderUnusualBody();
+    renderRiskyUsersBody();
+    renderRiskySigninsBody();
+    renderLegacyBody();
+
+    const onSel = (id, fn) => { const e = el(id); if (e) e.addEventListener('change', () => fn(e.value)); };
+    const onSearch = (id, fn) => {
+      const e = el(id); if (!e) return; let t;
+      e.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => fn(e.value), 150); });
+    };
+    onSel('fu-sev', (v) => { signinFilters.unusual.severity = v; renderUnusualBody(); });
+    onSearch('fu-q', (v) => { signinFilters.unusual.q = v; renderUnusualBody(); });
+    onSel('fru-level', (v) => { signinFilters.riskyUsers.level = v; renderRiskyUsersBody(); });
+    onSel('fru-state', (v) => { signinFilters.riskyUsers.state = v; renderRiskyUsersBody(); });
+    onSearch('fru-q', (v) => { signinFilters.riskyUsers.q = v; renderRiskyUsersBody(); });
+    onSel('frs-level', (v) => { signinFilters.riskySignins.level = v; renderRiskySigninsBody(); });
+    onSel('frs-detail', (v) => { signinFilters.riskySignins.detail = v; renderRiskySigninsBody(); });
+    onSearch('frs-q', (v) => { signinFilters.riskySignins.q = v; renderRiskySigninsBody(); });
+    onSel('fl-proto', (v) => { signinFilters.legacy.proto = v; renderLegacyBody(); });
+    onSel('fl-result', (v) => { signinFilters.legacy.result = v; renderLegacyBody(); });
+    onSearch('fl-q', (v) => { signinFilters.legacy.q = v; renderLegacyBody(); });
   }
 
   /* ---------------------------------------------------------------------- */
