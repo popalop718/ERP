@@ -1,0 +1,224 @@
+{
+  "value": [
+    {
+      "id": "a944f3a1-7b2c-4d9e-9a1f-44a9b2c3d4e5",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "riskLevel": "high",
+      "riskState": "atRisk",
+      "riskDetail": "none",
+      "riskLastUpdatedDateTime": "2026-06-03T23:03:04.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "aa44f3a1-7b2c-4d9e-9a1f-44aab2c3d4e5",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "riskLevel": "high",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-06-03T18:40:00.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "ab44f3a1-7b2c-4d9e-9a1f-44abb2c3d4e5",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "riskLevel": "high",
+      "riskState": "confirmedCompromised",
+      "riskDetail": "userPerformedSecuredPasswordReset",
+      "riskLastUpdatedDateTime": "2026-06-03T04:08:04.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "ac44f3a1-7b2c-4d9e-9a1f-44acb2c3d4e5",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-06-01T16:11:21.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "ad44f3a1-7b2c-4d9e-9a1f-44adb2c3d4e5",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "none",
+      "riskLastUpdatedDateTime": "2026-06-04T20:58:23.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "ae44f3a1-7b2c-4d9e-9a1f-44aeb2c3d4e5",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-06-04T19:04:54.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "af44f3a1-7b2c-4d9e-9a1f-44afb2c3d4e5",
+      "userDisplayName": "Charlotte Kim",
+      "userPrincipalName": "charlotte.kim@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-06-02T18:04:03.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b044f3a1-7b2c-4d9e-9a1f-44b0b2c3d4e5",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "userPerformedSecuredPasswordReset",
+      "riskLastUpdatedDateTime": "2026-06-02T04:20:45.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b144f3a1-7b2c-4d9e-9a1f-44b1b2c3d4e5",
+      "userDisplayName": "Sophia Rossi",
+      "userPrincipalName": "sophia.rossi@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-06-02T02:42:56.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b244f3a1-7b2c-4d9e-9a1f-44b2b2c3d4e5",
+      "userDisplayName": "Amelia Hughes",
+      "userPrincipalName": "amelia.hughes@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-06-01T19:11:36.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b344f3a1-7b2c-4d9e-9a1f-44b3b2c3d4e5",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-30T17:35:39.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b444f3a1-7b2c-4d9e-9a1f-44b4b2c3d4e5",
+      "userDisplayName": "Daniel Costa",
+      "userPrincipalName": "daniel.costa@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-30T04:59:48.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b544f3a1-7b2c-4d9e-9a1f-44b5b2c3d4e5",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-29T22:54:02.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b644f3a1-7b2c-4d9e-9a1f-44b6b2c3d4e5",
+      "userDisplayName": "Evelyn Tanaka",
+      "userPrincipalName": "evelyn.tanaka@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "userPerformedSecuredPasswordReset",
+      "riskLastUpdatedDateTime": "2026-05-29T19:58:21.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b744f3a1-7b2c-4d9e-9a1f-44b7b2c3d4e5",
+      "userDisplayName": "Benjamin Ivanov",
+      "userPrincipalName": "benjamin.ivanov@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "userPerformedSecuredPasswordReset",
+      "riskLastUpdatedDateTime": "2026-05-29T02:48:18.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b844f3a1-7b2c-4d9e-9a1f-44b8b2c3d4e5",
+      "userDisplayName": "Liam Okafor",
+      "userPrincipalName": "liam.okafor@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-27T03:58:02.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "b944f3a1-7b2c-4d9e-9a1f-44b9b2c3d4e5",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "userPerformedSecuredPasswordReset",
+      "riskLastUpdatedDateTime": "2026-05-27T02:36:46.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "ba44f3a1-7b2c-4d9e-9a1f-44bab2c3d4e5",
+      "userDisplayName": "Jack Morrison",
+      "userPrincipalName": "jack.morrison@contoso.com",
+      "riskLevel": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-21T22:40:11.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "bb44f3a1-7b2c-4d9e-9a1f-44bbb2c3d4e5",
+      "userDisplayName": "Lucas Fernandez",
+      "userPrincipalName": "lucas.fernandez@contoso.com",
+      "riskLevel": "low",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-21T19:35:25.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    },
+    {
+      "id": "bc44f3a1-7b2c-4d9e-9a1f-44bcb2c3d4e5",
+      "userDisplayName": "Ethan Brooks",
+      "userPrincipalName": "ethan.brooks@contoso.com",
+      "riskLevel": "low",
+      "riskState": "atRisk",
+      "riskDetail": "adminConfirmedUserCompromised",
+      "riskLastUpdatedDateTime": "2026-05-20T19:16:02.000Z",
+      "isProcessing": false,
+      "isDeleted": false
+    }
+  ]
+}

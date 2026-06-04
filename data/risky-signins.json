@@ -1,0 +1,2968 @@
+{
+  "value": [
+    {
+      "id": "b13cf3a1-7b2c-4d9e-9a1f-3cb1b2c3d4e5",
+      "createdDateTime": "2026-06-04T20:58:23.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.165.182",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "d13cf3a1-7b2c-4d9e-9a1f-3cd1b2c3d4e5",
+      "createdDateTime": "2026-06-04T19:04:54.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.227.171",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "9b39f3a1-7b2c-4d9e-9a1f-399bb2c3d4e5",
+      "createdDateTime": "2026-06-03T23:03:04.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "20.42.48.148",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "133df3a1-7b2c-4d9e-9a1f-3d13b2c3d4e5",
+      "createdDateTime": "2026-06-03T18:40:00.000Z",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "ipAddress": "177.135.224.251",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "São Paulo",
+        "state": "São Paulo",
+        "countryOrRegion": "BR"
+      },
+      "riskLevelDuringSignIn": "high",
+      "riskLevelAggregated": "high",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "0f39f3a1-7b2c-4d9e-9a1f-390fb2c3d4e5",
+      "createdDateTime": "2026-06-03T04:08:04.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.227.122",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "1839f3a1-7b2c-4d9e-9a1f-3918b2c3d4e5",
+      "createdDateTime": "2026-06-02T19:06:08.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.109.65",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "6e38f3a1-7b2c-4d9e-9a1f-386eb2c3d4e5",
+      "createdDateTime": "2026-06-02T18:04:03.000Z",
+      "userDisplayName": "Charlotte Kim",
+      "userPrincipalName": "charlotte.kim@contoso.com",
+      "ipAddress": "51.140.36.233",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "fe38f3a1-7b2c-4d9e-9a1f-38feb2c3d4e5",
+      "createdDateTime": "2026-06-02T17:10:20.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.244.184",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "963df3a1-7b2c-4d9e-9a1f-3d96b2c3d4e5",
+      "createdDateTime": "2026-06-02T11:45:00.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "197.210.17.164",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Authenticated SMTP",
+      "location": {
+        "city": "Lagos",
+        "state": "Lagos",
+        "countryOrRegion": "NG"
+      },
+      "riskLevelDuringSignIn": "high",
+      "riskLevelAggregated": "high",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ac36f3a1-7b2c-4d9e-9a1f-36acb2c3d4e5",
+      "createdDateTime": "2026-06-02T04:20:45.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.99.234",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ed35f3a1-7b2c-4d9e-9a1f-35edb2c3d4e5",
+      "createdDateTime": "2026-06-02T02:42:56.000Z",
+      "userDisplayName": "Sophia Rossi",
+      "userPrincipalName": "sophia.rossi@contoso.com",
+      "ipAddress": "51.140.67.152",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "7936f3a1-7b2c-4d9e-9a1f-3679b2c3d4e5",
+      "createdDateTime": "2026-06-02T00:11:43.000Z",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "ipAddress": "20.42.202.204",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "da35f3a1-7b2c-4d9e-9a1f-35dab2c3d4e5",
+      "createdDateTime": "2026-06-01T23:27:39.000Z",
+      "userDisplayName": "Sophia Rossi",
+      "userPrincipalName": "sophia.rossi@contoso.com",
+      "ipAddress": "51.140.141.67",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "8835f3a1-7b2c-4d9e-9a1f-3588b2c3d4e5",
+      "createdDateTime": "2026-06-01T19:11:36.000Z",
+      "userDisplayName": "Amelia Hughes",
+      "userPrincipalName": "amelia.hughes@contoso.com",
+      "ipAddress": "40.115.233.135",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "2836f3a1-7b2c-4d9e-9a1f-3628b2c3d4e5",
+      "createdDateTime": "2026-06-01T16:11:21.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "40.115.184.49",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a044f3a1-7b2c-4d9e-9a1f-44a0b2c3d4e5",
+      "createdDateTime": "2026-06-01T12:10:00.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "177.135.46.231",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "São Paulo",
+        "state": "São Paulo",
+        "countryOrRegion": "BR"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "8d44f3a1-7b2c-4d9e-9a1f-448db2c3d4e5",
+      "createdDateTime": "2026-06-01T11:42:00.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "120.234.228.105",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Shenzhen",
+        "state": "Guangdong",
+        "countryOrRegion": "CN"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 50126,
+        "failureReason": "Invalid username or password.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "8844f3a1-7b2c-4d9e-9a1f-4488b2c3d4e5",
+      "createdDateTime": "2026-06-01T11:35:00.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "197.210.232.79",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Lagos",
+        "state": "Lagos",
+        "countryOrRegion": "NG"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "8044f3a1-7b2c-4d9e-9a1f-4480b2c3d4e5",
+      "createdDateTime": "2026-06-01T11:21:00.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "177.135.248.234",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "São Paulo",
+        "state": "São Paulo",
+        "countryOrRegion": "BR"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 50126,
+        "failureReason": "Invalid username or password.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "7b44f3a1-7b2c-4d9e-9a1f-447bb2c3d4e5",
+      "createdDateTime": "2026-06-01T11:14:00.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "95.165.118.93",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Moscow",
+        "state": "Moscow",
+        "countryOrRegion": "RU"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "7344f3a1-7b2c-4d9e-9a1f-4473b2c3d4e5",
+      "createdDateTime": "2026-06-01T11:00:00.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "177.135.68.78",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "São Paulo",
+        "state": "São Paulo",
+        "countryOrRegion": "BR"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 50126,
+        "failureReason": "Invalid username or password.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "c133f3a1-7b2c-4d9e-9a1f-33c1b2c3d4e5",
+      "createdDateTime": "2026-06-01T01:24:36.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "20.42.167.146",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a134f3a1-7b2c-4d9e-9a1f-34a1b2c3d4e5",
+      "createdDateTime": "2026-05-31T23:06:22.000Z",
+      "userDisplayName": "Charlotte Kim",
+      "userPrincipalName": "charlotte.kim@contoso.com",
+      "ipAddress": "51.140.40.183",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "1133f3a1-7b2c-4d9e-9a1f-3311b2c3d4e5",
+      "createdDateTime": "2026-05-31T03:22:46.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.47.245",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "4833f3a1-7b2c-4d9e-9a1f-3348b2c3d4e5",
+      "createdDateTime": "2026-05-30T22:59:24.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.25.28",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5233f3a1-7b2c-4d9e-9a1f-3352b2c3d4e5",
+      "createdDateTime": "2026-05-30T22:00:56.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.158.91",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "d632f3a1-7b2c-4d9e-9a1f-32d6b2c3d4e5",
+      "createdDateTime": "2026-05-30T20:57:15.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.77.176",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "0032f3a1-7b2c-4d9e-9a1f-3200b2c3d4e5",
+      "createdDateTime": "2026-05-30T17:35:39.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.222.89",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c330f3a1-7b2c-4d9e-9a1f-30c3b2c3d4e5",
+      "createdDateTime": "2026-05-30T04:59:48.000Z",
+      "userDisplayName": "Daniel Costa",
+      "userPrincipalName": "daniel.costa@contoso.com",
+      "ipAddress": "40.115.238.169",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b12ff3a1-7b2c-4d9e-9a1f-2fb1b2c3d4e5",
+      "createdDateTime": "2026-05-30T03:12:45.000Z",
+      "userDisplayName": "Sophia Rossi",
+      "userPrincipalName": "sophia.rossi@contoso.com",
+      "ipAddress": "51.140.77.103",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "812ff3a1-7b2c-4d9e-9a1f-2f81b2c3d4e5",
+      "createdDateTime": "2026-05-30T01:57:01.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "20.42.170.229",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c82ff3a1-7b2c-4d9e-9a1f-2fc8b2c3d4e5",
+      "createdDateTime": "2026-05-29T22:54:02.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.213.95",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "8130f3a1-7b2c-4d9e-9a1f-3081b2c3d4e5",
+      "createdDateTime": "2026-05-29T19:58:21.000Z",
+      "userDisplayName": "Evelyn Tanaka",
+      "userPrincipalName": "evelyn.tanaka@contoso.com",
+      "ipAddress": "40.115.36.126",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "093df3a1-7b2c-4d9e-9a1f-3d09b2c3d4e5",
+      "createdDateTime": "2026-05-29T18:40:00.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "177.135.143.21",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "São Paulo",
+        "state": "São Paulo",
+        "countryOrRegion": "BR"
+      },
+      "riskLevelDuringSignIn": "high",
+      "riskLevelAggregated": "high",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "422ff3a1-7b2c-4d9e-9a1f-2f42b2c3d4e5",
+      "createdDateTime": "2026-05-29T02:48:18.000Z",
+      "userDisplayName": "Benjamin Ivanov",
+      "userPrincipalName": "benjamin.ivanov@contoso.com",
+      "ipAddress": "20.42.174.69",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "bc2df3a1-7b2c-4d9e-9a1f-2dbcb2c3d4e5",
+      "createdDateTime": "2026-05-29T00:19:39.000Z",
+      "userDisplayName": "Sophia Rossi",
+      "userPrincipalName": "sophia.rossi@contoso.com",
+      "ipAddress": "51.140.198.19",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b22df3a1-7b2c-4d9e-9a1f-2db2b2c3d4e5",
+      "createdDateTime": "2026-05-28T17:55:24.000Z",
+      "userDisplayName": "Sophia Rossi",
+      "userPrincipalName": "sophia.rossi@contoso.com",
+      "ipAddress": "51.140.205.220",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c32ef3a1-7b2c-4d9e-9a1f-2ec3b2c3d4e5",
+      "createdDateTime": "2026-05-28T17:24:08.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.39.5",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "dc2df3a1-7b2c-4d9e-9a1f-2ddcb2c3d4e5",
+      "createdDateTime": "2026-05-28T17:18:23.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.51.160",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "e92cf3a1-7b2c-4d9e-9a1f-2ce9b2c3d4e5",
+      "createdDateTime": "2026-05-28T03:16:31.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.3.69",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "9f29f3a1-7b2c-4d9e-9a1f-299fb2c3d4e5",
+      "createdDateTime": "2026-05-27T03:58:02.000Z",
+      "userDisplayName": "Liam Okafor",
+      "userPrincipalName": "liam.okafor@contoso.com",
+      "ipAddress": "13.64.37.2",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Seattle",
+        "state": "Washington",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5d2af3a1-7b2c-4d9e-9a1f-2a5db2c3d4e5",
+      "createdDateTime": "2026-05-27T03:37:21.000Z",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "ipAddress": "20.42.220.234",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "6929f3a1-7b2c-4d9e-9a1f-2969b2c3d4e5",
+      "createdDateTime": "2026-05-27T02:36:46.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.198.27",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5029f3a1-7b2c-4d9e-9a1f-2950b2c3d4e5",
+      "createdDateTime": "2026-05-27T01:50:35.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.239.26",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "1b2af3a1-7b2c-4d9e-9a1f-2a1bb2c3d4e5",
+      "createdDateTime": "2026-05-26T19:28:05.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "40.115.73.56",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "da29f3a1-7b2c-4d9e-9a1f-29dab2c3d4e5",
+      "createdDateTime": "2026-05-26T17:19:56.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.93.13",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 50126,
+        "failureReason": "Invalid username or password.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "2a2bf3a1-7b2c-4d9e-9a1f-2b2ab2c3d4e5",
+      "createdDateTime": "2026-05-26T17:04:12.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.26.239",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "d428f3a1-7b2c-4d9e-9a1f-28d4b2c3d4e5",
+      "createdDateTime": "2026-05-26T02:20:49.000Z",
+      "userDisplayName": "Daniel Costa",
+      "userPrincipalName": "daniel.costa@contoso.com",
+      "ipAddress": "40.115.197.201",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a326f3a1-7b2c-4d9e-9a1f-26a3b2c3d4e5",
+      "createdDateTime": "2026-05-25T03:57:01.000Z",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "ipAddress": "20.42.104.249",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "fb26f3a1-7b2c-4d9e-9a1f-26fbb2c3d4e5",
+      "createdDateTime": "2026-05-25T03:19:44.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.187.244",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "4c27f3a1-7b2c-4d9e-9a1f-274cb2c3d4e5",
+      "createdDateTime": "2026-05-25T02:31:09.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.25.137",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5825f3a1-7b2c-4d9e-9a1f-2558b2c3d4e5",
+      "createdDateTime": "2026-05-24T19:30:54.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.138.70",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "0027f3a1-7b2c-4d9e-9a1f-2700b2c3d4e5",
+      "createdDateTime": "2026-05-24T19:11:06.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.113.112",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5627f3a1-7b2c-4d9e-9a1f-2756b2c3d4e5",
+      "createdDateTime": "2026-05-24T17:23:45.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.241.14",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 53003,
+        "failureReason": "Access blocked by Conditional Access policy.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "7724f3a1-7b2c-4d9e-9a1f-2477b2c3d4e5",
+      "createdDateTime": "2026-05-24T04:07:37.000Z",
+      "userDisplayName": "Evelyn Tanaka",
+      "userPrincipalName": "evelyn.tanaka@contoso.com",
+      "ipAddress": "40.115.190.245",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "d724f3a1-7b2c-4d9e-9a1f-24d7b2c3d4e5",
+      "createdDateTime": "2026-05-23T19:21:49.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.233.161",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5123f3a1-7b2c-4d9e-9a1f-2351b2c3d4e5",
+      "createdDateTime": "2026-05-23T16:11:54.000Z",
+      "userDisplayName": "Amelia Hughes",
+      "userPrincipalName": "amelia.hughes@contoso.com",
+      "ipAddress": "40.115.34.50",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b721f3a1-7b2c-4d9e-9a1f-21b7b2c3d4e5",
+      "createdDateTime": "2026-05-23T01:34:01.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "20.42.56.131",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "0522f3a1-7b2c-4d9e-9a1f-2205b2c3d4e5",
+      "createdDateTime": "2026-05-23T00:48:30.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.132.156",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "9522f3a1-7b2c-4d9e-9a1f-2295b2c3d4e5",
+      "createdDateTime": "2026-05-22T22:16:48.000Z",
+      "userDisplayName": "Evelyn Tanaka",
+      "userPrincipalName": "evelyn.tanaka@contoso.com",
+      "ipAddress": "40.115.199.156",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c021f3a1-7b2c-4d9e-9a1f-21c0b2c3d4e5",
+      "createdDateTime": "2026-05-22T18:21:34.000Z",
+      "userDisplayName": "Liam Okafor",
+      "userPrincipalName": "liam.okafor@contoso.com",
+      "ipAddress": "13.64.105.193",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Seattle",
+        "state": "Washington",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "1121f3a1-7b2c-4d9e-9a1f-2111b2c3d4e5",
+      "createdDateTime": "2026-05-21T22:40:11.000Z",
+      "userDisplayName": "Jack Morrison",
+      "userPrincipalName": "jack.morrison@contoso.com",
+      "ipAddress": "51.140.153.29",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "1120f3a1-7b2c-4d9e-9a1f-2011b2c3d4e5",
+      "createdDateTime": "2026-05-21T22:39:12.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.75.45",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ae20f3a1-7b2c-4d9e-9a1f-20aeb2c3d4e5",
+      "createdDateTime": "2026-05-21T19:35:25.000Z",
+      "userDisplayName": "Lucas Fernandez",
+      "userPrincipalName": "lucas.fernandez@contoso.com",
+      "ipAddress": "20.42.239.142",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "dd20f3a1-7b2c-4d9e-9a1f-20ddb2c3d4e5",
+      "createdDateTime": "2026-05-21T18:24:27.000Z",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "ipAddress": "20.42.215.235",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "8d1ff3a1-7b2c-4d9e-9a1f-1f8db2c3d4e5",
+      "createdDateTime": "2026-05-21T04:50:08.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.247.57",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "891ff3a1-7b2c-4d9e-9a1f-1f89b2c3d4e5",
+      "createdDateTime": "2026-05-20T20:16:05.000Z",
+      "userDisplayName": "Daniel Costa",
+      "userPrincipalName": "daniel.costa@contoso.com",
+      "ipAddress": "40.115.83.67",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ad1ef3a1-7b2c-4d9e-9a1f-1eadb2c3d4e5",
+      "createdDateTime": "2026-05-20T19:16:02.000Z",
+      "userDisplayName": "Ethan Brooks",
+      "userPrincipalName": "ethan.brooks@contoso.com",
+      "ipAddress": "51.140.114.110",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c41cf3a1-7b2c-4d9e-9a1f-1cc4b2c3d4e5",
+      "createdDateTime": "2026-05-20T03:38:48.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.172.165",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "cf1df3a1-7b2c-4d9e-9a1f-1dcfb2c3d4e5",
+      "createdDateTime": "2026-05-20T01:18:22.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.172.249",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "771df3a1-7b2c-4d9e-9a1f-1d77b2c3d4e5",
+      "createdDateTime": "2026-05-20T00:37:11.000Z",
+      "userDisplayName": "Evelyn Tanaka",
+      "userPrincipalName": "evelyn.tanaka@contoso.com",
+      "ipAddress": "40.115.196.176",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a21cf3a1-7b2c-4d9e-9a1f-1ca2b2c3d4e5",
+      "createdDateTime": "2026-05-19T22:15:14.000Z",
+      "userDisplayName": "Liam Okafor",
+      "userPrincipalName": "liam.okafor@contoso.com",
+      "ipAddress": "13.64.162.197",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Seattle",
+        "state": "Washington",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "941cf3a1-7b2c-4d9e-9a1f-1c94b2c3d4e5",
+      "createdDateTime": "2026-05-19T21:29:50.000Z",
+      "userDisplayName": "Liam Okafor",
+      "userPrincipalName": "liam.okafor@contoso.com",
+      "ipAddress": "13.64.232.22",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Seattle",
+        "state": "Washington",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c71df3a1-7b2c-4d9e-9a1f-1dc7b2c3d4e5",
+      "createdDateTime": "2026-05-19T18:23:24.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.137.41",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 50055,
+        "failureReason": "The password is expired.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "8e1df3a1-7b2c-4d9e-9a1f-1d8eb2c3d4e5",
+      "createdDateTime": "2026-05-19T16:56:42.000Z",
+      "userDisplayName": "Jack Morrison",
+      "userPrincipalName": "jack.morrison@contoso.com",
+      "ipAddress": "51.140.219.85",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "0e19f3a1-7b2c-4d9e-9a1f-190eb2c3d4e5",
+      "createdDateTime": "2026-05-18T04:25:28.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "40.115.81.82",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "d919f3a1-7b2c-4d9e-9a1f-19d9b2c3d4e5",
+      "createdDateTime": "2026-05-18T03:22:20.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.119.55",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "251af3a1-7b2c-4d9e-9a1f-1a25b2c3d4e5",
+      "createdDateTime": "2026-05-17T21:26:10.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.12.139",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ad18f3a1-7b2c-4d9e-9a1f-18adb2c3d4e5",
+      "createdDateTime": "2026-05-17T16:10:56.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.176.14",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ff17f3a1-7b2c-4d9e-9a1f-17ffb2c3d4e5",
+      "createdDateTime": "2026-05-16T23:32:00.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.20.181",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b116f3a1-7b2c-4d9e-9a1f-16b1b2c3d4e5",
+      "createdDateTime": "2026-05-16T21:49:50.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.149.191",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b616f3a1-7b2c-4d9e-9a1f-16b6b2c3d4e5",
+      "createdDateTime": "2026-05-16T18:23:32.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.229.205",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a216f3a1-7b2c-4d9e-9a1f-16a2b2c3d4e5",
+      "createdDateTime": "2026-05-16T18:05:34.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.76.206",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ca15f3a1-7b2c-4d9e-9a1f-15cab2c3d4e5",
+      "createdDateTime": "2026-05-15T23:50:52.000Z",
+      "userDisplayName": "Samuel Adeyemi",
+      "userPrincipalName": "samuel.adeyemi@contoso.com",
+      "ipAddress": "40.115.224.122",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "2214f3a1-7b2c-4d9e-9a1f-1422b2c3d4e5",
+      "createdDateTime": "2026-05-15T22:01:06.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "20.42.7.49",
+      "appDisplayName": "Azure Portal",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "9215f3a1-7b2c-4d9e-9a1f-1592b2c3d4e5",
+      "createdDateTime": "2026-05-15T21:02:15.000Z",
+      "userDisplayName": "Daniel Costa",
+      "userPrincipalName": "daniel.costa@contoso.com",
+      "ipAddress": "40.115.131.143",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "f715f3a1-7b2c-4d9e-9a1f-15f7b2c3d4e5",
+      "createdDateTime": "2026-05-15T20:49:45.000Z",
+      "userDisplayName": "Benjamin Ivanov",
+      "userPrincipalName": "benjamin.ivanov@contoso.com",
+      "ipAddress": "20.42.76.119",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a115f3a1-7b2c-4d9e-9a1f-15a1b2c3d4e5",
+      "createdDateTime": "2026-05-15T18:05:10.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.217.117",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 50058,
+        "failureReason": "Session information is not sufficient for single-sign-on.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "e114f3a1-7b2c-4d9e-9a1f-14e1b2c3d4e5",
+      "createdDateTime": "2026-05-15T17:31:29.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "40.115.195.82",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "a213f3a1-7b2c-4d9e-9a1f-13a2b2c3d4e5",
+      "createdDateTime": "2026-05-15T03:12:39.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.72.211",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "0713f3a1-7b2c-4d9e-9a1f-1307b2c3d4e5",
+      "createdDateTime": "2026-05-14T21:50:17.000Z",
+      "userDisplayName": "Lucas Fernandez",
+      "userPrincipalName": "lucas.fernandez@contoso.com",
+      "ipAddress": "20.42.78.107",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "7911f3a1-7b2c-4d9e-9a1f-1179b2c3d4e5",
+      "createdDateTime": "2026-05-14T00:14:51.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.34.134",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 50053,
+        "failureReason": "Account is locked because the user tried to sign in too many times with an incorrect ID or password.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "8e10f3a1-7b2c-4d9e-9a1f-108eb2c3d4e5",
+      "createdDateTime": "2026-05-13T22:38:39.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.72.8",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "4c11f3a1-7b2c-4d9e-9a1f-114cb2c3d4e5",
+      "createdDateTime": "2026-05-13T18:37:22.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.73.85",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "5110f3a1-7b2c-4d9e-9a1f-1051b2c3d4e5",
+      "createdDateTime": "2026-05-13T18:35:04.000Z",
+      "userDisplayName": "Liam Okafor",
+      "userPrincipalName": "liam.okafor@contoso.com",
+      "ipAddress": "13.64.200.65",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Seattle",
+        "state": "Washington",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ed0ff3a1-7b2c-4d9e-9a1f-fedb2c3d4e5f",
+      "createdDateTime": "2026-05-13T17:33:56.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.9.81",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b60ef3a1-7b2c-4d9e-9a1f-eb6b2c3d4e5f",
+      "createdDateTime": "2026-05-13T03:06:17.000Z",
+      "userDisplayName": "Lucas Fernandez",
+      "userPrincipalName": "lucas.fernandez@contoso.com",
+      "ipAddress": "20.42.53.201",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b10ef3a1-7b2c-4d9e-9a1f-eb1b2c3d4e5f",
+      "createdDateTime": "2026-05-12T22:46:35.000Z",
+      "userDisplayName": "Mia Andersson",
+      "userPrincipalName": "mia.andersson@contoso.com",
+      "ipAddress": "40.115.188.194",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "fc0df3a1-7b2c-4d9e-9a1f-dfcb2c3d4e5f",
+      "createdDateTime": "2026-05-12T21:48:13.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.128.82",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c90bf3a1-7b2c-4d9e-9a1f-bc9b2c3d4e5f",
+      "createdDateTime": "2026-05-11T20:07:40.000Z",
+      "userDisplayName": "Amelia Hughes",
+      "userPrincipalName": "amelia.hughes@contoso.com",
+      "ipAddress": "40.115.52.52",
+      "appDisplayName": "OneDrive",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "030df3a1-7b2c-4d9e-9a1f-d03b2c3d4e5f",
+      "createdDateTime": "2026-05-11T18:30:12.000Z",
+      "userDisplayName": "Evelyn Tanaka",
+      "userPrincipalName": "evelyn.tanaka@contoso.com",
+      "ipAddress": "40.115.117.237",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "ef09f3a1-7b2c-4d9e-9a1f-9efb2c3d4e5f",
+      "createdDateTime": "2026-05-11T03:29:46.000Z",
+      "userDisplayName": "Olivia Chen",
+      "userPrincipalName": "olivia.chen@contoso.com",
+      "ipAddress": "20.42.249.18",
+      "appDisplayName": "Office 365 Exchange Online",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "360af3a1-7b2c-4d9e-9a1f-a36b2c3d4e5f",
+      "createdDateTime": "2026-05-11T03:12:12.000Z",
+      "userDisplayName": "Isabella Novak",
+      "userPrincipalName": "isabella.novak@contoso.com",
+      "ipAddress": "40.115.177.213",
+      "appDisplayName": "SharePoint Online",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "2d0af3a1-7b2c-4d9e-9a1f-a2db2c3d4e5f",
+      "createdDateTime": "2026-05-11T00:20:40.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.245.64",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "2609f3a1-7b2c-4d9e-9a1f-926b2c3d4e5f",
+      "createdDateTime": "2026-05-09T20:20:25.000Z",
+      "userDisplayName": "Harper Singh",
+      "userPrincipalName": "harper.singh@contoso.com",
+      "ipAddress": "20.42.133.134",
+      "appDisplayName": "Microsoft Authenticator App",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unfamiliarFeatures",
+      "riskEventTypes": [
+        "unfamiliarFeatures"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c307f3a1-7b2c-4d9e-9a1f-7c3b2c3d4e5f",
+      "createdDateTime": "2026-05-09T19:50:05.000Z",
+      "userDisplayName": "Amelia Hughes",
+      "userPrincipalName": "amelia.hughes@contoso.com",
+      "ipAddress": "40.115.77.96",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "Dublin",
+        "state": "Leinster",
+        "countryOrRegion": "IE"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "newCountry",
+      "riskEventTypes": [
+        "newCountry"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "bd08f3a1-7b2c-4d9e-9a1f-8bdb2c3d4e5f",
+      "createdDateTime": "2026-05-09T16:27:23.000Z",
+      "userDisplayName": "Henry Walsh",
+      "userPrincipalName": "henry.walsh@contoso.com",
+      "ipAddress": "20.42.255.1",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "1207f3a1-7b2c-4d9e-9a1f-712b2c3d4e5f",
+      "createdDateTime": "2026-05-08T17:27:53.000Z",
+      "userDisplayName": "Jack Morrison",
+      "userPrincipalName": "jack.morrison@contoso.com",
+      "ipAddress": "51.140.80.22",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "b005f3a1-7b2c-4d9e-9a1f-5b0b2c3d4e5f",
+      "createdDateTime": "2026-05-08T01:09:35.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.152.11",
+      "appDisplayName": "Microsoft 365",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "unlikelyTravel",
+      "riskEventTypes": [
+        "unlikelyTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "7004f3a1-7b2c-4d9e-9a1f-470b2c3d4e5f",
+      "createdDateTime": "2026-05-07T23:29:54.000Z",
+      "userDisplayName": "Mason Delgado",
+      "userPrincipalName": "mason.delgado@contoso.com",
+      "ipAddress": "20.42.115.85",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "New York",
+        "state": "New York",
+        "countryOrRegion": "US"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "c705f3a1-7b2c-4d9e-9a1f-5c7b2c3d4e5f",
+      "createdDateTime": "2026-05-07T20:08:31.000Z",
+      "userDisplayName": "Chloe Dubois",
+      "userPrincipalName": "chloe.dubois@contoso.com",
+      "ipAddress": "51.140.0.183",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Mobile Apps and Desktop clients",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "f201f3a1-7b2c-4d9e-9a1f-1f2b2c3d4e5f",
+      "createdDateTime": "2026-05-07T01:10:21.000Z",
+      "userDisplayName": "Noah Patterson",
+      "userPrincipalName": "noah.patterson@contoso.com",
+      "ipAddress": "51.140.156.45",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "medium",
+      "riskLevelAggregated": "medium",
+      "riskState": "atRisk",
+      "riskDetail": "maliciousIPAddress",
+      "riskEventTypes": [
+        "maliciousIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    },
+    {
+      "id": "8f03f3a1-7b2c-4d9e-9a1f-38fb2c3d4e5f",
+      "createdDateTime": "2026-05-06T21:14:52.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.241.163",
+      "appDisplayName": "Microsoft Teams",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "impossibleTravel",
+      "riskEventTypes": [
+        "impossibleTravel"
+      ],
+      "status": {
+        "errorCode": 50053,
+        "failureReason": "Account is locked because the user tried to sign in too many times with an incorrect ID or password.",
+        "additionalDetails": null
+      }
+    },
+    {
+      "id": "7d03f3a1-7b2c-4d9e-9a1f-37db2c3d4e5f",
+      "createdDateTime": "2026-05-06T18:07:26.000Z",
+      "userDisplayName": "Grace O'Brien",
+      "userPrincipalName": "grace.o.brien@contoso.com",
+      "ipAddress": "51.140.122.202",
+      "appDisplayName": "Power BI",
+      "clientAppUsed": "Browser",
+      "location": {
+        "city": "London",
+        "state": "England",
+        "countryOrRegion": "GB"
+      },
+      "riskLevelDuringSignIn": "low",
+      "riskLevelAggregated": "low",
+      "riskState": "atRisk",
+      "riskDetail": "anonymizedIPAddress",
+      "riskEventTypes": [
+        "anonymizedIPAddress"
+      ],
+      "status": {
+        "errorCode": 0,
+        "failureReason": null,
+        "additionalDetails": "MFA requirement satisfied by claim in the token"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "showback-dashboard",
+  "version": "1.0.0",
+  "description": "Show-back dashboard for Microsoft Entra ID (Azure AD) & M365 sign-in and audit logs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "serve": "node scripts/serve.mjs",
+    "generate-data": "node scripts/generate-sample-data.mjs"
+  },
+  "license": "MIT"
+}
