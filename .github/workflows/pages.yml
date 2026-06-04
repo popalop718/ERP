@@ -1,0 +1,48 @@
+name: Deploy to GitHub Pages
+
+# Publishes the static dashboard to GitHub Pages.
+# The site is plain static files at the repo root, so no build is required —
+# we just upload the repo and deploy it.
+
+on:
+  push:
+    branches:
+      - claude/show-back-dashboard-365-azure-ipb9O
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; cancel in-progress runs of the same group.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        # enablement: true turns Pages on for the repo on first run (needs pages: write)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload the whole repo root (index.html, assets/, data/)
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
