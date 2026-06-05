@@ -136,11 +136,11 @@
   function renderTopbar() {
     const bar = el('topbar');
     if (!bar) return;
-    if (state.view === 'source') { bar.innerHTML = ''; bar.style.display = 'none'; return; }
     bar.style.display = '';
     const r = state.dateRange;
     const presets = [['24h', '24h'], ['7d', '7d'], ['30d', '30d'], ['90d', '90d'], ['all', 'All']];
-    bar.innerHTML = `
+    const onSource = state.view === 'source';
+    const dateControls = onSource ? '<div class="dr-left"></div>' : `
       <div class="dr-left">
         <span class="dr-label">Date range</span>
         <div class="dr-presets">
@@ -151,14 +151,111 @@
           <span>→</span>
           <input type="date" id="dr-to" value="${esc(ymd(Math.min(r.endMs, Date.now())))}" max="${esc(ymd(Date.now()))}"/>
         </div>
-      </div>
-      <div class="dr-right">
-        <span class="dr-live"><i></i>Live</span>
-        <span class="muted">${esc(rangeSummary())}</span>
       </div>`;
-    el('dr-from').addEventListener('change', (e) => setCustomRange(e.target.value, el('dr-to').value));
-    el('dr-to').addEventListener('change', (e) => setCustomRange(el('dr-from').value, e.target.value));
-    bar.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => setDatePreset(b.dataset.preset)));
+    bar.innerHTML = `
+      ${dateControls}
+      <div class="dr-right">
+        ${onSource ? '' : `<span class="dr-live"><i></i>Live</span><span class="muted">${esc(rangeSummary())}</span>`}
+        <div id="alertbell" class="alertbell"></div>
+      </div>`;
+    if (!onSource) {
+      el('dr-from').addEventListener('change', (e) => setCustomRange(e.target.value, el('dr-to').value));
+      el('dr-to').addEventListener('change', (e) => setCustomRange(el('dr-from').value, e.target.value));
+      bar.querySelectorAll('[data-preset]').forEach((b) => b.addEventListener('click', () => setDatePreset(b.dataset.preset)));
+    }
+    renderAlerts();
+  }
+  function rangeSummary() {
+    const r = state.dateRange;
+    if (r.preset === 'all') return 'All available data';
+    const from = ymd(r.startMs), to = ymd(Math.min(r.endMs, Date.now()));
+    return from === to ? from : `${from} → ${to}`;
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Alerts / notifications — high-risk events coalesced behind the bell     */
+  /* ---------------------------------------------------------------------- */
+  let alertsOpen = false;
+  const ackedAlerts = new Set();
+
+  function computeAlerts() {
+    const au = sigCache.audit || [];
+    const out = [];
+    Governance.caChanges(au).forEach((a) => {
+      const hot = /delete|disable/i.test(a.activity) || /disabled|removed/i.test(a.change || '');
+      out.push({ id: 'ca:' + a.id, severity: hot ? 'high' : 'medium', category: 'Conditional Access',
+        title: a.activity, detail: `${a.policy || ''}${a.change ? ' — ' + a.change : ''} · by ${a.actor || '—'}`,
+        time: a.dateTime, drill: { type: 'stat:ca', key: '' } });
+    });
+    Governance.privilegedAssignments(au).forEach((a) => {
+      const hot = /global admin|privileged|security admin|authentication admin/i.test(a.role);
+      out.push({ id: 'priv:' + a.id, severity: hot ? 'high' : 'medium', category: 'Privileged role',
+        title: `${a.role} assigned`, detail: `${a.member} · by ${a.actor || '—'}`,
+        time: a.dateTime, drill: { type: 'stat:priv', key: '' } });
+    });
+    Governance.sharingPolicyChanges(au).forEach((a) => {
+      const hot = /anonymous|anyone|allow|removed/i.test(a.change || '');
+      out.push({ id: 'pol:' + a.id, severity: hot ? 'high' : 'medium', category: 'Sharing policy',
+        title: 'SharePoint sharing policy changed', detail: `${a.change || a.activity} · by ${a.actor || '—'}`,
+        time: a.dateTime, drill: { type: 'stat:sharing', key: '' } });
+    });
+    (sigCache.riskySignins || []).filter((s) => s.riskLevel === 'high').forEach((s) => {
+      out.push({ id: 'risk:' + s.id, severity: 'high', category: 'Risky sign-in',
+        title: `High-risk sign-in: ${s.user}`, detail: `${humanize(s.riskDetail)} · ${s.location || s.ip}`,
+        time: s.dateTime, drill: { type: 'signinUser', key: s.upn } });
+    });
+    return out.sort((a, b) => b.time - a.time);
+  }
+
+  function renderAlerts() {
+    const host = el('alertbell'); if (!host) return;
+    const alerts = computeAlerts();
+    const unack = alerts.filter((a) => !ackedAlerts.has(a.id));
+    const n = unack.length;
+    const hasHigh = unack.some((a) => a.severity === 'high');
+    host.innerHTML = `
+      <button id="bell-btn" class="bell-btn ${alertsOpen ? 'active' : ''}" aria-label="Alerts (${n})" title="Alerts">
+        <span class="bell-ico">🔔</span>
+        ${n ? `<span class="bell-badge ${hasHigh ? 'high' : ''}">${n > 99 ? '99+' : n}</span>` : ''}
+      </button>
+      ${alertsOpen ? renderAlertPanel(alerts) : ''}`;
+    el('bell-btn').addEventListener('click', (e) => { e.stopPropagation(); alertsOpen = !alertsOpen; renderAlerts(); });
+    if (alertsOpen) {
+      const mr = el('mark-read');
+      if (mr) mr.addEventListener('click', (e) => { e.stopPropagation(); alerts.forEach((a) => ackedAlerts.add(a.id)); renderAlerts(); });
+      host.querySelectorAll('[data-alert-drill]').forEach((row) => {
+        row.addEventListener('click', () => { alertsOpen = false; const t = row.dataset.alertDrill, k = row.dataset.alertKey || ''; renderAlerts(); dispatchDrill(t, k); });
+      });
+    }
+  }
+
+  function renderAlertPanel(alerts) {
+    const head = (extra) => `<div class="alert-head"><b>Alerts</b>${extra}</div>`;
+    if (!alerts.length) {
+      return `<div class="alert-panel">${head('')}<div class="alert-empty">No high-risk alerts in the selected range</div></div>`;
+    }
+    const order = ['Risky sign-in', 'Conditional Access', 'Privileged role', 'Sharing policy'];
+    const groups = {};
+    alerts.forEach((a) => { (groups[a.category] = groups[a.category] || []).push(a); });
+    const unackTotal = alerts.filter((a) => !ackedAlerts.has(a.id)).length;
+    let body = '';
+    order.filter((c) => groups[c]).forEach((c) => {
+      const items = groups[c];
+      const hi = items.filter((a) => a.severity === 'high').length;
+      body += `<div class="alert-group"><div class="alert-group-h">${esc(c)}<span class="ag-count">${items.length}${hi ? ` · ${hi} high` : ''}</span></div>`;
+      items.slice(0, 25).forEach((a) => {
+        body += `<div class="alert-row ${ackedAlerts.has(a.id) ? 'seen' : ''}" data-alert-drill="${esc(a.drill.type)}" data-alert-key="${esc(a.drill.key)}" title="Open details">
+          <span class="sev-dot" style="background:${sevColor(a.severity)}"></span>
+          <div class="alert-main"><div class="alert-title">${esc(a.title)}</div><div class="alert-detail">${esc(a.detail)}</div></div>
+          <span class="alert-time">${ago(a.time)}</span></div>`;
+      });
+      body += `</div>`;
+    });
+    return `<div class="alert-panel">
+      ${head(`<span class="muted">${unackTotal} new</span><button id="mark-read" class="link-btn">Mark all read</button>`)}
+      <div class="alert-list">${body}</div>
+      <div class="alert-foot muted">High-risk policy, privileged-access &amp; sign-in events · ${esc(rangeSummary())}</div>
+    </div>`;
   }
   function rangeSummary() {
     const r = state.dateRange;
@@ -1207,6 +1304,8 @@
   /* Boot                                                                    */
   /* ---------------------------------------------------------------------- */
   document.addEventListener('click', (e) => {
+    // Close the alerts panel when clicking outside it
+    if (alertsOpen && !e.target.closest('.alertbell')) { alertsOpen = false; renderAlerts(); }
     // Close drill-down when clicking the backdrop
     if (e.target.id === 'drill') { closeDrill(); return; }
     // Drill-down on any element tagged with data-drill (chart segment, stat card, row)
@@ -1220,7 +1319,11 @@
     const nav = e.target.closest('[data-view]');
     if (nav) { state.view = nav.dataset.view; render(); window.scrollTo(0, 0); return; }
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drillState) closeDrill(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (drillState) closeDrill();
+    else if (alertsOpen) { alertsOpen = false; renderAlerts(); }
+  });
 
   loadSample().catch(err);
 })();
