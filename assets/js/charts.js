@@ -69,7 +69,9 @@
   function donut(data, opts = {}) {
     const total = data.reduce((a, d) => a + d.value, 0);
     if (!total) return empty();
-    const size = opts.size || 170, r = size / 2 - 6, cx = size / 2, cy = size / 2, sw = opts.thickness || 22;
+    const size = opts.size || 170, cx = size / 2, cy = size / 2, sw = opts.thickness || 22;
+    // radius must leave room for half the stroke width (+1px) so the ring never clips the viewBox
+    const r = size / 2 - sw / 2 - 1;
     let a0 = -Math.PI / 2, segs = '';
     data.forEach((d, i) => {
       const frac = d.value / total;
