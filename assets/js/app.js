@@ -1104,10 +1104,25 @@
 
   let drillState = null;
   const stripTags = (html) => String(html).replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
-  const rowText = (cols, r) => cols.map((c) => stripTags(c.c(r))).join(' ');
+
+  /* Type-aware comparator: risk rank > numeric > date > text */
+  const RANK = { high: 3, medium: 2, low: 1, none: 0 };
+  function cmpCell(a, b) {
+    const la = a.toLowerCase(), lb = b.toLowerCase();
+    if (RANK[la] != null && RANK[lb] != null) return RANK[la] - RANK[lb];
+    const na = parseFloat(a.replace(/[,\s]/g, '')), nb = parseFloat(b.replace(/[,\s]/g, ''));
+    const aNum = a !== '' && !isNaN(na) && /^[\d.,\s%-]+$/.test(a.trim());
+    const bNum = b !== '' && !isNaN(nb) && /^[\d.,\s%-]+$/.test(b.trim());
+    if (aNum && bNum) return na - nb;
+    const da = Date.parse(a), db = Date.parse(b);
+    if (!isNaN(da) && !isNaN(db)) return da - db;
+    return a.localeCompare(b);
+  }
 
   function openDrill(title, columns, rows) {
-    drillState = { title, columns, rows, q: '', filtered: rows };
+    // Precompute the plain-text cell matrix once for fast filter/sort
+    const indexed = rows.map((r) => ({ r, t: columns.map((c) => stripTags(c.c(r))) }));
+    drillState = { title, columns, rows, indexed, q: '', colFilters: {}, sort: { idx: -1, dir: 1 }, filtered: rows };
     const o = el('drill');
     o.hidden = false;
     o.innerHTML = `
@@ -1115,30 +1130,59 @@
         <div class="drill-head">
           <div><h3>${esc(title)}</h3><span id="drill-count" class="muted"></span></div>
           <div class="drill-actions">
-            <div class="search-box sm"><span class="search-icon">⌕</span><input id="drill-q" type="search" placeholder="Search these records…" autocomplete="off"/></div>
+            <div class="search-box sm"><span class="search-icon">⌕</span><input id="drill-q" type="search" placeholder="Search all columns…" autocomplete="off"/></div>
+            <button id="drill-clear" class="btn-ghost">Clear</button>
             <button id="drill-csv" class="btn-ghost">Export CSV</button>
             <button id="drill-close" class="btn-ghost" aria-label="Close">✕</button>
           </div>
         </div>
-        <div class="drill-body"><table class="tbl"><thead><tr>${columns.map((c) => `<th>${esc(c.h)}</th>`).join('')}</tr></thead><tbody id="drill-tbody"></tbody></table></div>
+        <div class="drill-body"><table class="tbl drill-tbl">
+          <thead>
+            <tr>${columns.map((c, i) => `<th class="sortable" data-col="${i}"><span>${esc(c.h)}</span><span class="sort-ind" id="si-${i}"></span></th>`).join('')}</tr>
+            <tr class="filter-row">${columns.map((c, i) => `<th><input class="col-filter" data-col="${i}" type="search" placeholder="filter…" autocomplete="off"/></th>`).join('')}</tr>
+          </thead>
+          <tbody id="drill-tbody"></tbody>
+        </table></div>
       </div>`;
     document.body.style.overflow = 'hidden';
-    const qi = el('drill-q');
-    let t; qi.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { drillState.q = qi.value; renderDrillRows(); }, 120); });
+    let t;
+    el('drill-q').addEventListener('input', (e) => { clearTimeout(t); t = setTimeout(() => { drillState.q = e.target.value; renderDrillRows(); }, 120); });
+    o.querySelectorAll('.col-filter').forEach((inp) => {
+      let ct; inp.addEventListener('input', () => { clearTimeout(ct); ct = setTimeout(() => { drillState.colFilters[inp.dataset.col] = inp.value; renderDrillRows(); }, 120); });
+    });
+    o.querySelectorAll('th.sortable').forEach((th) => {
+      th.addEventListener('click', () => {
+        const idx = +th.dataset.col, s = drillState.sort;
+        if (s.idx === idx) s.dir *= -1; else { s.idx = idx; s.dir = 1; }
+        renderDrillRows();
+      });
+    });
+    el('drill-clear').addEventListener('click', () => {
+      drillState.q = ''; drillState.colFilters = {}; drillState.sort = { idx: -1, dir: 1 };
+      el('drill-q').value = '';
+      o.querySelectorAll('.col-filter').forEach((i) => { i.value = ''; });
+      renderDrillRows();
+    });
     el('drill-close').addEventListener('click', closeDrill);
-    el('drill-csv').addEventListener('click', () => exportCSV(title, columns, drillState.filtered));
+    el('drill-csv').addEventListener('click', () => exportCSV(drillState.title, drillState.columns, drillState.filtered));
     renderDrillRows();
   }
 
   function renderDrillRows() {
     const d = drillState; if (!d) return;
-    const q = d.q.trim().toLowerCase();
-    const rows = q ? d.rows.filter((r) => rowText(d.columns, r).toLowerCase().includes(q)) : d.rows;
-    d.filtered = rows;
-    el('drill-tbody').innerHTML = rows.slice(0, 2000).map((r) =>
-      '<tr>' + d.columns.map((c) => `<td>${c.c(r)}</td>`).join('') + '</tr>').join('') ||
+    const gq = d.q.trim().toLowerCase();
+    const active = Object.entries(d.colFilters).filter(([, v]) => v && v.trim()).map(([i, v]) => [+i, v.trim().toLowerCase()]);
+    let list = d.indexed;
+    if (gq) list = list.filter((x) => x.t.join(' ').toLowerCase().includes(gq));
+    if (active.length) list = list.filter((x) => active.every(([i, v]) => x.t[i].toLowerCase().includes(v)));
+    const s = d.sort;
+    if (s.idx >= 0) list = [...list].sort((a, b) => s.dir * cmpCell(a.t[s.idx], b.t[s.idx]));
+    d.filtered = list.map((x) => x.r);
+    el('drill-tbody').innerHTML = list.slice(0, 2000).map((x) =>
+      '<tr>' + d.columns.map((c) => `<td>${c.c(x.r)}</td>`).join('') + '</tr>').join('') ||
       `<tr><td colspan="${d.columns.length}" class="ch-empty">No matching records</td></tr>`;
-    el('drill-count').textContent = `${fmtNum(rows.length)} of ${fmtNum(d.rows.length)} records · ${rangeSummary()}`;
+    el('drill-count').textContent = `${fmtNum(list.length)} of ${fmtNum(d.rows.length)} records · ${rangeSummary()}`;
+    d.columns.forEach((c, i) => { const si = el('si-' + i); if (si) si.textContent = s.idx === i ? (s.dir === 1 ? ' ▲' : ' ▼') : ''; });
   }
 
   function closeDrill() {
