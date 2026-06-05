@@ -222,26 +222,26 @@
     return `
       ${header('Security Overview', 'Sign-in, audit, governance & threat posture across Microsoft Entra ID and M365')}
       <div class="grid stats">
-        ${stat('Sign-ins', fmtNum(s.length), `${fmtNum(failures.length)} failed`, 'low')}
-        ${stat('Risky users', fmtNum(ru.length), countLvl(ru, 'high') + ' high', 'medium')}
-        ${stat('Risky sign-ins', fmtNum(rs.length), countLvl(rs, 'high', 'riskLevel') + ' high', 'medium')}
-        ${stat('Legacy auth', fmtNum(legacy.length), pctOf(legacy.length, s.length) + ' of traffic', 'high')}
-        ${stat('Flagged users', fmtNum(unusual.length), unusual.filter((u) => u.severity === 'high').length + ' high severity', 'high')}
-        ${stat('Global Admins', fmtNum(ga), ga > 5 ? 'above recommended' : 'within guidance', ga > 5 ? 'high' : 'low')}
-        ${stat('OAuth consents', fmtNum(Governance.oauthConsents(au).length), Governance.oauthConsents(au).filter((c) => c.risky).length + ' high-risk', 'medium')}
-        ${stat('Defender threats', fmtNum(defender.length), `${fmtNum(delivered)} delivered`, 'high')}
-        ${stat('Audit events', fmtNum(au.length), auditFail + ' failed', 'low')}
+        ${stat('Sign-ins', fmtNum(s.length), `${fmtNum(failures.length)} failed`, 'low', 'stat:signins')}
+        ${stat('Risky users', fmtNum(ru.length), countLvl(ru, 'high') + ' high', 'medium', 'stat:riskyUsers')}
+        ${stat('Risky sign-ins', fmtNum(rs.length), countLvl(rs, 'high', 'riskLevel') + ' high', 'medium', 'stat:riskySignins')}
+        ${stat('Legacy auth', fmtNum(legacy.length), pctOf(legacy.length, s.length) + ' of traffic', 'high', 'stat:legacy')}
+        ${stat('Flagged users', fmtNum(unusual.length), unusual.filter((u) => u.severity === 'high').length + ' high severity', 'high', 'stat:flagged')}
+        ${stat('Global Admins', fmtNum(ga), ga > 5 ? 'above recommended' : 'within guidance', ga > 5 ? 'high' : 'low', 'stat:globalAdmins')}
+        ${stat('OAuth consents', fmtNum(Governance.oauthConsents(au).length), Governance.oauthConsents(au).filter((c) => c.risky).length + ' high-risk', 'medium', 'stat:oauth')}
+        ${stat('Defender threats', fmtNum(defender.length), `${fmtNum(delivered)} delivered`, 'high', 'stat:defender')}
+        ${stat('Audit events', fmtNum(au.length), auditFail + ' failed', 'low', 'stat:audit')}
       </div>
       <div class="grid cols-2">
-        ${card('Sign-in volume', Charts.vbar(merged), 'Red bars mark days with elevated failure counts')}
-        ${card('Sign-in outcome', Charts.donut([
+        ${card('Sign-in volume', `<div data-drill="signinDay">${Charts.vbar(merged)}</div>`, 'Click a bar to drill into that day · red marks elevated failures')}
+        ${card('Sign-in outcome', `<div data-drill="signinOutcome">${Charts.donut([
           { label: 'Success', value: s.length - failures.length, color: RISK.low },
           { label: 'Failure', value: failures.length, color: RISK.high },
-        ], { centerLabel: 'sign-ins' }))}
+        ], { centerLabel: 'sign-ins' })}</div>`, 'Click a segment to view those sign-ins')}
       </div>
       <div class="grid cols-2">
-        ${card('Top flagged users (unusual activity)', topFlaggedMini(unusual))}
-        ${card('Email threats by type (Defender)', Charts.donut(threatBreakdown(defender), { centerLabel: 'threats' }))}
+        ${card('Top flagged users (unusual activity)', topFlaggedMini(unusual), 'Click a user to view their sign-ins')}
+        ${card('Email threats by type (Defender)', `<div data-drill="defenderType">${Charts.donut(threatBreakdown(defender), { centerLabel: 'threats' })}</div>`, 'Click a segment to view those threats')}
       </div>`;
   }
   function threatBreakdown(defender) {
@@ -257,7 +257,7 @@
   function topFlaggedMini(unusual) {
     if (!unusual.length) return '<div class="ch-empty">No unusual activity detected</div>';
     return `<div class="mini-list">` + unusual.slice(0, 6).map((u) => `
-      <div class="mini-row" data-jump="signins">
+      <div class="mini-row" data-drill="signinUser" data-k="${esc(u.upn)}">
         <span class="sev-dot" style="background:${sevColor(u.severity)}"></span>
         <span class="mini-name">${esc(u.user)}</span>
         <span class="score-bar"><i style="width:${u.score}%;background:${sevColor(u.severity)}"></i></span>
@@ -323,7 +323,7 @@
     let list = all.filter((u) => f.severity === 'all' || u.severity === f.severity);
     if (f.q.trim()) list = list.filter((u) => matches(f.q, u.user, u.upn));
     const cards = list.slice(0, 24).map((u) => `
-      <div class="flag-card sev-${u.severity}">
+      <div class="flag-card sev-${u.severity} drillable" data-drill="signinUser" data-k="${esc(u.upn)}">
         <div class="flag-head">
           <span class="sev-dot" style="background:${sevColor(u.severity)}"></span>
           <div>
@@ -371,7 +371,7 @@
     if (f.state !== 'all') u = u.filter((r) => r.riskState === f.state);
     if (f.q.trim()) u = u.filter((r) => matches(f.q, r.user, r.upn));
     const rows = u.slice(0, 250).map((r) => `
-      <tr>
+      <tr class="row-link" data-drill="signinUser" data-k="${esc(r.upn)}" title="View sign-ins for ${esc(r.user)}">
         <td><div class="cell-name">${esc(r.user)}</div><div class="cell-sub">${esc(r.upn)}</div></td>
         <td>${pill(r.riskLevel)}</td>
         <td><span class="state-${esc(r.riskState)}">${esc(humanize(r.riskState))}</span></td>
@@ -379,7 +379,7 @@
       </tr>`).join('');
     const chart = Charts.donut(riskBreakdown(u, 'riskLevel'), { centerLabel: 'users', size: 150 });
     el('ru-body').innerHTML =
-      `<div class="split">${chart}
+      `<div class="split"><div data-drill="riskyUserLevel">${chart}</div>
         <div class="tbl-scroll"><table class="tbl"><thead><tr><th>User</th><th>Risk</th><th>State</th><th>Updated</th></tr></thead>
         <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`;
     setCount('fru-count', u.length, sigCache.riskyUsers.length, 'users');
@@ -406,7 +406,7 @@
     if (f.detail !== 'all') rs = rs.filter((r) => r.riskDetail === f.detail);
     if (f.q.trim()) rs = rs.filter((r) => matches(f.q, r.user, r.upn, r.ip, r.location));
     const rows = rs.slice(0, 250).map((r) => `
-      <tr>
+      <tr class="row-link" data-drill="signinUser" data-k="${esc(r.upn)}" title="View sign-ins for ${esc(r.user)}">
         <td><div class="cell-name">${esc(r.user)}</div><div class="cell-sub">${esc(r.location || r.ip)}</div></td>
         <td>${pill(r.riskLevel)}</td>
         <td class="muted">${esc(humanize(r.riskDetail))}</td>
@@ -414,7 +414,7 @@
       </tr>`).join('');
     const chart = Charts.donut(riskBreakdown(rs, 'riskLevel'), { centerLabel: 'sign-ins', size: 150 });
     el('rs-body').innerHTML =
-      `<div class="split">${chart}
+      `<div class="split"><div data-drill="riskySigninLevel">${chart}</div>
         <div class="tbl-scroll"><table class="tbl"><thead><tr><th>User / source</th><th>Risk</th><th>Detection</th><th>When</th></tr></thead>
         <tbody>${rows || emptyRow(4)}</tbody></table></div></div>`;
     setCount('frs-count', rs.length, sigCache.riskySignins.length, 'sign-ins');
@@ -454,9 +454,9 @@
          <span class="muted">Legacy protocols bypass modern auth & MFA — block via Conditional Access</span>
        </div>
        <div class="grid cols-3">
-         <div class="sub-card"><h4>By protocol</h4>${Charts.hbar(byProto.map((d, i) => ({ ...d, color: Charts.PALETTE[i % Charts.PALETTE.length] })))}</div>
-         <div class="sub-card"><h4>Top users</h4>${Charts.hbar(byUser.map((d) => ({ ...d, color: RISK.medium })))}</div>
-         <div class="sub-card"><h4>Daily trend</h4>${Charts.vbar(series.map((d) => ({ ...d, color: RISK.high })), { width: 380, height: 180 })}</div>
+         <div class="sub-card"><h4>By protocol</h4><div data-drill="legacyProto">${Charts.hbar(byProto.map((d, i) => ({ ...d, color: Charts.PALETTE[i % Charts.PALETTE.length] })))}</div></div>
+         <div class="sub-card"><h4>Top users</h4><div data-drill="legacyUser">${Charts.hbar(byUser.map((d) => ({ ...d, color: RISK.medium })))}</div></div>
+         <div class="sub-card"><h4>Daily trend</h4><div data-drill="legacyDay">${Charts.vbar(series.map((d) => ({ ...d, color: RISK.high })), { width: 380, height: 180 })}</div></div>
        </div>`;
     setCount('fl-count', legacy.length, allLegacy.length, 'attempts');
   }
@@ -516,15 +516,15 @@
     return `
       ${header('Governance & Threats', 'Privileged access, tenant-configuration changes & Microsoft Defender threats')}
       <div class="grid stats">
-        ${stat('Global Admins', fmtNum(ga), ga > 5 ? 'above recommended (≤5)' : 'within guidance', ga > 5 ? 'high' : 'low')}
-        ${stat('New priv. assignments', fmtNum(govCache.priv.length), 'in selected range', 'medium')}
-        ${stat('Cond. Access changes', fmtNum(govCache.ca.length), 'in selected range', 'medium')}
-        ${stat('SharePoint policy', fmtNum(govCache.sharing.length), 'sharing changes', 'medium')}
-        ${stat('New external users', fmtNum(govCache.external.length), 'guest invitations', 'medium')}
-        ${stat('Anonymous links', fmtNum(govCache.anon.length), 'created', 'high')}
-        ${stat('Forwarding rules', fmtNum(govCache.forward.length), govCache.forward.filter((f) => f.external).length + ' external', 'high')}
-        ${stat('OAuth consents', fmtNum(govCache.oauth.length), govCache.oauth.filter((c) => c.risky).length + ' high-risk', 'medium')}
-        ${stat('Defender threats', fmtNum(govCache.defender.length), govCache.defender.filter((d) => d.delivered).length + ' delivered', 'high')}
+        ${stat('Global Admins', fmtNum(ga), ga > 5 ? 'above recommended (≤5)' : 'within guidance', ga > 5 ? 'high' : 'low', 'stat:globalAdmins')}
+        ${stat('New priv. assignments', fmtNum(govCache.priv.length), 'in selected range', 'medium', 'stat:priv')}
+        ${stat('Cond. Access changes', fmtNum(govCache.ca.length), 'in selected range', 'medium', 'stat:ca')}
+        ${stat('SharePoint policy', fmtNum(govCache.sharing.length), 'sharing changes', 'medium', 'stat:sharing')}
+        ${stat('New external users', fmtNum(govCache.external.length), 'guest invitations', 'medium', 'stat:external')}
+        ${stat('Anonymous links', fmtNum(govCache.anon.length), 'created', 'high', 'stat:anon')}
+        ${stat('Forwarding rules', fmtNum(govCache.forward.length), govCache.forward.filter((f) => f.external).length + ' external', 'high', 'stat:forward')}
+        ${stat('OAuth consents', fmtNum(govCache.oauth.length), govCache.oauth.filter((c) => c.risky).length + ' high-risk', 'medium', 'stat:oauth')}
+        ${stat('Defender threats', fmtNum(govCache.defender.length), govCache.defender.filter((d) => d.delivered).length + ' delivered', 'high', 'stat:defender')}
       </div>
       <div class="grid cols-2">
         ${govShellGlobalAdmins()}
@@ -606,8 +606,8 @@
           <div class="tbl-scroll" style="max-height:200px"><table class="tbl"><tbody>${changeRows || emptyRow(3)}</tbody></table></div>
         </div>
       </div>
-      <h4 class="sub-h" style="margin-top:12px">Privileged role inventory</h4>
-      ${Charts.hbar(inv.map((d, i) => ({ ...d, color: privPillClass(d.label) === 'pill-high' ? RISK.high : Charts.PALETTE[i % Charts.PALETTE.length] })))}`;
+      <h4 class="sub-h" style="margin-top:12px">Privileged role inventory <span class="muted" style="font-weight:400">— click a role for members</span></h4>
+      <div data-drill="role">${Charts.hbar(inv.map((d, i) => ({ ...d, color: privPillClass(d.label) === 'pill-high' ? RISK.high : Charts.PALETTE[i % Charts.PALETTE.length] })))}</div>`;
   }
 
   /* Component 2 — New privileged role assignments */
@@ -704,9 +704,9 @@
         <span class="muted">Blocked vs delivered email threats over the selected range</span>
       </div>
       <div class="grid cols-3">
-        <div class="sub-card"><h4>Daily volume</h4>${Charts.vbar(series.map((s) => ({ ...s, color: RISK.high })), { width: 380, height: 180 })}</div>
-        <div class="sub-card"><h4>By type</h4>${Charts.donut(threatBreakdown(rows), { centerLabel: 'threats', size: 150 })}</div>
-        <div class="sub-card"><h4>Top targeted users</h4>${Charts.hbar(Analytics.topBy(rows, (d) => d.recipientName || d.recipient, 6).map((x) => ({ ...x, color: RISK.medium })))}</div>
+        <div class="sub-card"><h4>Daily volume</h4><div data-drill="defenderDay">${Charts.vbar(series.map((s) => ({ ...s, color: RISK.high })), { width: 380, height: 180 })}</div></div>
+        <div class="sub-card"><h4>By type</h4><div data-drill="defenderType">${Charts.donut(threatBreakdown(rows), { centerLabel: 'threats', size: 150 })}</div></div>
+        <div class="sub-card"><h4>Top targeted users</h4><div data-drill="defenderUser">${Charts.hbar(Analytics.topBy(rows, (d) => d.recipientName || d.recipient, 6).map((x) => ({ ...x, color: RISK.medium })))}</div></div>
       </div>
       <div class="tbl-scroll" style="margin-top:12px"><table class="tbl"><thead><tr><th>Time (UTC)</th><th>Type</th><th>Subject / sender</th><th>Recipient</th><th>Delivery</th></tr></thead><tbody>${table || emptyRow(5)}</tbody></table></div>`;
     setCount('gc-defender', rows.length, all.length, 'emails');
@@ -960,8 +960,9 @@
   /* Small render helpers                                                     */
   /* ---------------------------------------------------------------------- */
   function header(title, sub) { return `<div class="view-head"><h1>${esc(title)}</h1><p>${esc(sub)}</p></div>`; }
-  function stat(label, value, sub, level) {
-    return `<div class="stat-card">
+  function stat(label, value, sub, level, drill) {
+    const d = drill ? ` drillable" data-drill="${esc(drill)}" tabindex="0` : '';
+    return `<div class="stat-card${d}">
       <div class="stat-accent" style="background:${sevColor(level)}"></div>
       <div class="stat-label">${esc(label)}</div>
       <div class="stat-value">${esc(value)}</div>
@@ -997,14 +998,185 @@
   function err(e) { setStatus(''); console.error(e); alert('Error loading data: ' + e.message); }
 
   /* ---------------------------------------------------------------------- */
+  /* Drill-down — clicking widgets opens a filtered detail view              */
+  /* ---------------------------------------------------------------------- */
+  const dayKeyOf = (d) => { const x = d instanceof Date ? d : new Date(d); return isNaN(x) ? '' : x.toISOString().slice(0, 10); };
+
+  /* Column sets for the detail tables */
+  const COLS = {
+    signins: () => [
+      { h: 'Time (UTC)', c: (s) => `<span class="nowrap">${fmtDate(s.dateTime)}</span>` },
+      { h: 'User', c: (s) => `<div class="cell-name">${esc(s.user)}</div><div class="cell-sub">${esc(s.upn)}</div>` },
+      { h: 'IP / Location', c: (s) => `${esc(s.ip || '')}<div class="cell-sub">${esc(s.location || '')}</div>` },
+      { h: 'App', c: (s) => esc(s.app || '') },
+      { h: 'Client', c: (s) => `${esc(s.clientApp || '')}${s.isLegacy ? ' ' + pill('high', 'legacy') : ''}` },
+      { h: 'Risk', c: (s) => (s.riskLevel && s.riskLevel !== 'none') ? pill(s.riskLevel) : '<span class="muted">—</span>' },
+      { h: 'Status', c: (s) => s.success ? pill('low', 'success') : pill('high', 'fail' + (s.errorCode ? ' ' + s.errorCode : '')) },
+    ],
+    riskyUsers: () => [
+      { h: 'User', c: (r) => `<div class="cell-name">${esc(r.user)}</div><div class="cell-sub">${esc(r.upn)}</div>` },
+      { h: 'Risk', c: (r) => pill(r.riskLevel) },
+      { h: 'State', c: (r) => esc(humanize(r.riskState)) },
+      { h: 'Detail', c: (r) => esc(humanize(r.riskDetail)) },
+      { h: 'Updated', c: (r) => `<span class="nowrap muted">${r.lastUpdated && !isNaN(r.lastUpdated) ? fmtDate(r.lastUpdated) : '—'}</span>` },
+    ],
+    riskySignins: () => [
+      { h: 'Time (UTC)', c: (s) => `<span class="nowrap">${fmtDate(s.dateTime)}</span>` },
+      { h: 'User', c: (s) => `<div class="cell-name">${esc(s.user)}</div><div class="cell-sub">${esc(s.upn)}</div>` },
+      { h: 'Source', c: (s) => `${esc(s.ip || '')}<div class="cell-sub">${esc(s.location || '')}</div>` },
+      { h: 'Risk', c: (s) => pill(s.riskLevel) },
+      { h: 'Detection', c: (s) => esc(humanize(s.riskDetail)) },
+    ],
+    flagged: () => [
+      { h: 'User', c: (u) => `<div class="cell-name">${esc(u.user)}</div><div class="cell-sub">${esc(u.upn)}</div>` },
+      { h: 'Severity', c: (u) => pill(u.severity) },
+      { h: 'Score', c: (u) => `<b>${u.score}</b>` },
+      { h: 'Reasons', c: (u) => u.reasons.map((r) => `<div class="cell-sub">• ${esc(r)}</div>`).join('') },
+      { h: 'Last seen', c: (u) => `<span class="nowrap muted">${ago(u.stats.lastSeen)}</span>` },
+    ],
+    defender: () => [
+      { h: 'Time (UTC)', c: (d) => `<span class="nowrap">${fmtDate(d.dateTime)}</span>` },
+      { h: 'Type', c: (d) => threatPill(d.threat) },
+      { h: 'Subject / sender', c: (d) => `<div class="cell-name">${esc(trunc(d.subject, 50))}</div><div class="cell-sub">${esc(d.sender)}</div>` },
+      { h: 'Recipient', c: (d) => esc(d.recipientName || d.recipient) },
+      { h: 'Delivery', c: (d) => d.delivered ? pill('high', 'Delivered') : pill('low', esc(d.delivery || 'Blocked')) },
+    ],
+    audit: () => [
+      { h: 'Time (UTC)', c: (a) => `<span class="nowrap">${fmtDate(a.dateTime)}</span>` },
+      { h: 'Activity', c: (a) => `<div class="cell-name">${esc(a.activity)}</div><div class="cell-sub">${esc(a.category)}</div>` },
+      { h: 'Service', c: (a) => esc(a.service) },
+      { h: 'Initiated by', c: (a) => `${esc(a.actor || '')}<div class="cell-sub">${esc(a.ip || '')}</div>` },
+      { h: 'Target', c: (a) => esc(a.target || '') },
+      { h: 'Result', c: (a) => a.result === 'failure' ? pill('high', 'failure') : pill('low', 'success') },
+    ],
+    gov: () => [
+      { h: 'Time (UTC)', c: (a) => `<span class="nowrap">${fmtDate(a.dateTime)}</span>` },
+      { h: 'Activity', c: (a) => esc(a.activity) },
+      { h: 'Detail', c: (a) => esc(a.role || a.policy || a.app || a.forwardTo || a.email || a.resource || a.change || a.target || '') },
+      { h: 'Initiated by', c: (a) => esc(a.actor || '') },
+      { h: 'Result', c: (a) => a.result === 'failure' ? pill('high', 'failure') : pill('low', 'success') },
+    ],
+    ga: () => [
+      { h: 'Member', c: (m) => `<div class="cell-name">${esc(m.member)}</div><div class="cell-sub">${esc(m.upn)}</div>` },
+      { h: 'Assignment', c: (m) => esc(m.assignmentType || 'Assigned') },
+      { h: 'Assigned', c: (m) => `<span class="nowrap muted">${m.created && !isNaN(m.created) ? fmtDate(m.created) : '—'}</span>` },
+    ],
+  };
+
+  function dispatchDrill(type, key) {
+    if (!key && !type.startsWith('stat:')) return; // chart/row drills require a key
+    const S = sigCache;
+    const lc = (x) => String(x || '').toLowerCase();
+    const unusual = () => (S.unusual || (S.unusual = Analytics.unusualActivity(S.signins)));
+    let title, columns, rows;
+    switch (type) {
+      case 'stat:signins': title = 'All sign-ins'; columns = COLS.signins(); rows = S.signins; break;
+      case 'signinOutcome': { const fail = lc(key).startsWith('fail'); title = fail ? 'Failed sign-ins' : 'Successful sign-ins'; columns = COLS.signins(); rows = S.signins.filter((s) => fail ? !s.success : s.success); break; }
+      case 'signinDay': title = `Sign-ins on ${key}`; columns = COLS.signins(); rows = S.signins.filter((s) => dayKeyOf(s.dateTime) === key); break;
+      case 'signinUser': title = `Sign-ins — ${key}`; columns = COLS.signins(); rows = S.signins.filter((s) => s.upn === key || s.user === key); break;
+      case 'stat:legacy': title = 'Legacy authentication attempts'; columns = COLS.signins(); rows = S.signins.filter((s) => s.isLegacy); break;
+      case 'legacyProto': title = `Legacy auth — ${key}`; columns = COLS.signins(); rows = S.signins.filter((s) => s.isLegacy && (s.clientApp || 'Unknown') === key); break;
+      case 'legacyUser': title = `Legacy auth — ${key}`; columns = COLS.signins(); rows = S.signins.filter((s) => s.isLegacy && (s.user === key || s.upn === key)); break;
+      case 'legacyDay': title = `Legacy auth on ${key}`; columns = COLS.signins(); rows = S.signins.filter((s) => s.isLegacy && dayKeyOf(s.dateTime) === key); break;
+      case 'stat:riskyUsers': title = 'Risky users'; columns = COLS.riskyUsers(); rows = S.riskyUsers; break;
+      case 'riskyUserLevel': title = `Risky users — ${humanize(key)}`; columns = COLS.riskyUsers(); rows = S.riskyUsers.filter((r) => r.riskLevel === lc(key)); break;
+      case 'stat:riskySignins': title = 'Risky sign-ins'; columns = COLS.riskySignins(); rows = S.riskySignins; break;
+      case 'riskySigninLevel': title = `Risky sign-ins — ${humanize(key)}`; columns = COLS.riskySignins(); rows = S.riskySignins.filter((r) => r.riskLevel === lc(key)); break;
+      case 'stat:flagged': title = 'Flagged users (unusual activity)'; columns = COLS.flagged(); rows = unusual(); break;
+      case 'stat:defender': title = 'Defender email threats'; columns = COLS.defender(); rows = S.defender; break;
+      case 'defenderType': title = `Defender — ${key}`; columns = COLS.defender(); rows = S.defender.filter((d) => d.threat === key); break;
+      case 'defenderUser': title = `Defender threats — ${key}`; columns = COLS.defender(); rows = S.defender.filter((d) => (d.recipientName || d.recipient) === key); break;
+      case 'defenderDay': title = `Defender threats on ${key}`; columns = COLS.defender(); rows = S.defender.filter((d) => dayKeyOf(d.dateTime) === key); break;
+      case 'stat:audit': title = 'Audit events'; columns = COLS.audit(); rows = S.audit; break;
+      case 'stat:globalAdmins': title = 'Global administrators'; columns = COLS.ga(); rows = Governance.globalAdmins(state.privRoles); break;
+      case 'role': title = `Role members — ${key}`; columns = COLS.ga(); rows = state.privRoles.filter((r) => r.role === key); break;
+      case 'stat:priv': title = 'New privileged role assignments'; columns = COLS.gov(); rows = Governance.privilegedAssignments(S.audit); break;
+      case 'stat:ca': title = 'Conditional Access changes'; columns = COLS.gov(); rows = Governance.caChanges(S.audit); break;
+      case 'stat:sharing': title = 'SharePoint sharing policy changes'; columns = COLS.gov(); rows = Governance.sharingPolicyChanges(S.audit); break;
+      case 'stat:external': title = 'New external users'; columns = COLS.gov(); rows = Governance.externalUsers(S.audit); break;
+      case 'stat:anon': title = 'Anonymous sharing links'; columns = COLS.gov(); rows = Governance.anonymousLinks(S.audit); break;
+      case 'stat:forward': title = 'Mail forwarding rules'; columns = COLS.gov(); rows = Governance.forwardingRules(S.audit); break;
+      case 'stat:oauth': title = 'OAuth app consents'; columns = COLS.gov(); rows = Governance.oauthConsents(S.audit); break;
+      default: return;
+    }
+    openDrill(title, columns, rows || []);
+  }
+
+  let drillState = null;
+  const stripTags = (html) => String(html).replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
+  const rowText = (cols, r) => cols.map((c) => stripTags(c.c(r))).join(' ');
+
+  function openDrill(title, columns, rows) {
+    drillState = { title, columns, rows, q: '', filtered: rows };
+    const o = el('drill');
+    o.hidden = false;
+    o.innerHTML = `
+      <div class="drill-modal" role="dialog" aria-modal="true">
+        <div class="drill-head">
+          <div><h3>${esc(title)}</h3><span id="drill-count" class="muted"></span></div>
+          <div class="drill-actions">
+            <div class="search-box sm"><span class="search-icon">⌕</span><input id="drill-q" type="search" placeholder="Search these records…" autocomplete="off"/></div>
+            <button id="drill-csv" class="btn-ghost">Export CSV</button>
+            <button id="drill-close" class="btn-ghost" aria-label="Close">✕</button>
+          </div>
+        </div>
+        <div class="drill-body"><table class="tbl"><thead><tr>${columns.map((c) => `<th>${esc(c.h)}</th>`).join('')}</tr></thead><tbody id="drill-tbody"></tbody></table></div>
+      </div>`;
+    document.body.style.overflow = 'hidden';
+    const qi = el('drill-q');
+    let t; qi.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { drillState.q = qi.value; renderDrillRows(); }, 120); });
+    el('drill-close').addEventListener('click', closeDrill);
+    el('drill-csv').addEventListener('click', () => exportCSV(title, columns, drillState.filtered));
+    renderDrillRows();
+  }
+
+  function renderDrillRows() {
+    const d = drillState; if (!d) return;
+    const q = d.q.trim().toLowerCase();
+    const rows = q ? d.rows.filter((r) => rowText(d.columns, r).toLowerCase().includes(q)) : d.rows;
+    d.filtered = rows;
+    el('drill-tbody').innerHTML = rows.slice(0, 2000).map((r) =>
+      '<tr>' + d.columns.map((c) => `<td>${c.c(r)}</td>`).join('') + '</tr>').join('') ||
+      `<tr><td colspan="${d.columns.length}" class="ch-empty">No matching records</td></tr>`;
+    el('drill-count').textContent = `${fmtNum(rows.length)} of ${fmtNum(d.rows.length)} records · ${rangeSummary()}`;
+  }
+
+  function closeDrill() {
+    drillState = null;
+    const o = el('drill'); o.hidden = true; o.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  function exportCSV(title, columns, rows) {
+    const esc2 = (v) => `"${String(v).replace(/"/g, '""')}"`;
+    const lines = [columns.map((c) => esc2(c.h)).join(',')];
+    rows.forEach((r) => lines.push(columns.map((c) => esc2(stripTags(c.c(r)))).join(',')));
+    const blob = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  /* ---------------------------------------------------------------------- */
   /* Boot                                                                    */
   /* ---------------------------------------------------------------------- */
   document.addEventListener('click', (e) => {
+    // Close drill-down when clicking the backdrop
+    if (e.target.id === 'drill') { closeDrill(); return; }
+    // Drill-down on any element tagged with data-drill (chart segment, stat card, row)
+    const drill = e.target.closest('[data-drill]');
+    if (drill) {
+      const seg = e.target.closest('[data-k]');
+      const key = seg && drill.contains(seg) ? seg.dataset.k : (drill.dataset.k || '');
+      dispatchDrill(drill.dataset.drill, key);
+      return;
+    }
     const nav = e.target.closest('[data-view]');
     if (nav) { state.view = nav.dataset.view; render(); window.scrollTo(0, 0); return; }
-    const jump = e.target.closest('[data-jump]');
-    if (jump) { state.view = jump.dataset.jump; render(); window.scrollTo(0, 0); }
   });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drillState) closeDrill(); });
 
   loadSample().catch(err);
 })();

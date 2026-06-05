@@ -29,7 +29,7 @@
       const color = d.color || PALETTE[i % PALETTE.length];
       rows += `
         <text x="${labelW}" y="${y + rowH / 2}" text-anchor="end" class="ch-label" dominant-baseline="middle">${esc(trunc(d.label, 22))}</text>
-        <rect x="${barX}" y="${y + 5}" width="${w}" height="${rowH - 14}" rx="3" fill="${color}">
+        <rect x="${barX}" y="${y + 5}" width="${w}" height="${rowH - 14}" rx="3" fill="${color}" class="ch-seg" data-k="${esc(d.label)}">
           <title>${esc(d.label)}: ${d.value}${d.meta ? ' — ' + esc(d.meta) : ''}</title>
         </rect>
         <text x="${barX + w + 6}" y="${y + rowH / 2}" class="ch-val" dominant-baseline="middle">${fmt(d.value)}</text>`;
@@ -52,7 +52,7 @@
       const x = padL + i * bw;
       const y = padT + plotH - h;
       const color = d.color || (d.alert ? RISK.high : '#5b8def');
-      bars += `<rect x="${x + 1}" y="${y}" width="${Math.max(1, bw - 2)}" height="${Math.max(0, h)}" rx="2" fill="${color}"><title>${esc(d.label)}: ${d.value}</title></rect>`;
+      bars += `<rect x="${x + 1}" y="${y}" width="${Math.max(1, bw - 2)}" height="${Math.max(0, h)}" rx="2" fill="${color}" class="ch-seg" data-k="${esc(d.label)}"><title>${esc(d.label)}: ${d.value}</title></rect>`;
       if (i % step === 0) labels += `<text x="${x + bw / 2}" y="${H - 8}" text-anchor="middle" class="ch-axis">${esc(d.short || d.label)}</text>`;
     });
     // y gridlines
@@ -79,16 +79,16 @@
       const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
       const color = d.color || PALETTE[i % PALETTE.length];
       if (frac > 0.999) {
-        segs += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}"><title>${esc(d.label)}: ${d.value}</title></circle>`;
+        segs += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${sw}" class="ch-seg" data-k="${esc(d.label)}"><title>${esc(d.label)}: ${d.value}</title></circle>`;
       } else {
-        segs += `<path d="M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="butt"><title>${esc(d.label)}: ${d.value} (${Math.round(frac * 100)}%)</title></path>`;
+        segs += `<path d="M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="butt" class="ch-seg" data-k="${esc(d.label)}"><title>${esc(d.label)}: ${d.value} (${Math.round(frac * 100)}%)</title></path>`;
       }
       a0 = a1;
     });
     const center = `<text x="${cx}" y="${cy - 2}" text-anchor="middle" class="ch-donut-num">${fmt(total)}</text>
                     <text x="${cx}" y="${cy + 16}" text-anchor="middle" class="ch-axis">${esc(opts.centerLabel || 'total')}</text>`;
     const legend = data.map((d, i) =>
-      `<div class="ch-leg-row"><span class="ch-dot" style="background:${d.color || PALETTE[i % PALETTE.length]}"></span>${esc(d.label)}<b>${fmt(d.value)}</b></div>`).join('');
+      `<div class="ch-leg-row ch-seg" data-k="${esc(d.label)}"><span class="ch-dot" style="background:${d.color || PALETTE[i % PALETTE.length]}"></span>${esc(d.label)}<b>${fmt(d.value)}</b></div>`).join('');
     return `<div class="ch-donut-wrap"><svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">${segs}${center}</svg><div class="ch-legend">${legend}</div></div>`;
   }
 
