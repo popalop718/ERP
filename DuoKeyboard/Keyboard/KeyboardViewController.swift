@@ -18,7 +18,7 @@ final class KeyboardViewController: UIInputViewController, KeyboardViewDelegate 
     private let gifPanel = GIFPanelView()
     private let sideButton = UIButton(type: .system)
     private var heightConstraint: NSLayoutConstraint?
-    private let barHeight: CGFloat = 42
+    private var barHeight: CGFloat { isLaptopMode ? 48 : 42 }
 
     private var language: KeyboardLanguage = .english
     private var page: KeyboardPage = .letters
@@ -144,27 +144,80 @@ final class KeyboardViewController: UIInputViewController, KeyboardViewDelegate 
         keyboardView.update(shiftState: shiftState)
     }
 
+    // MARK: iPhone Duo geometry
+
+    private var screen: UIScreen { view.window?.windowScene?.screen ?? UIScreen.main }
+    private var profile: DeviceProfile { DeviceProfile.current(for: screen) }
+    private var crease: DeviceProfile.Crease? { profile.crease(screenBounds: screen.bounds) }
+
+    /// Inner display held wide: the fold runs top-to-bottom through the keyboard.
+    private var creaseIsVertical: Bool {
+        if let c = crease, case .vertical = c { return true }
+        return false
+    }
+
+    /// Inner display held tall: screen y of the fold.
+    private var horizontalCreaseY: CGFloat? {
+        if let c = crease, case .horizontal(let y) = c { return y }
+        return nil
+    }
+
+    /// Space the system leaves between the bottom of the keyboard view and the
+    /// bottom of the screen (home indicator / globe strip).
+    private var bottomInset: CGFloat {
+        guard view.window != nil else { return 34 }
+        let f = view.convert(view.bounds, to: screen.coordinateSpace)
+        let inset = screen.bounds.height - f.maxY
+        return (0...160).contains(inset) ? inset : 34
+    }
+
+    /// Duo inner display held tall: the crease runs across the screen. Laptop mode
+    /// makes the keyboard fill the lower half, like a laptop's keyboard deck.
+    private var isLaptopMode: Bool {
+        horizontalCreaseY != nil && settings.bool(.laptopMode)
+    }
+
+    /// Clear area kept on either side of the fold.
+    private var creaseClearance: CGFloat { profile.points(mm: 4) }
+
     private var isLandscapePhone: Bool {
-        let screen = view.window?.windowScene?.screen.bounds ?? UIScreen.main.bounds
-        return screen.width > screen.height && screen.height < 500
+        let b = screen.bounds
+        return b.width > b.height && b.height < 500
     }
 
     private var rowCount: Int { settings.bool(.numberRow) || page != .letters ? 5 : 4 }
 
     private func keyHeight() -> CGFloat {
-        let base = CGFloat(settings.keyHeight.points)
-        return isLandscapePhone ? min(base, 36) : base
+        // Same physical key height on every screen (Duo inner is 430 ppi, outer 460 ppi).
+        let base = profile.physical(CGFloat(settings.keyHeight.points))
+        return isLandscapePhone ? min(base, profile.physical(36)) : base
     }
 
-    private func desiredHeight() -> CGFloat { barHeight + CGFloat(rowCount) * keyHeight() + 4 }
+    private func desiredHeight() -> CGFloat {
+        let normal = barHeight + CGFloat(rowCount) * keyHeight() + 4
+        guard let creaseY = horizontalCreaseY else { return normal }
+        // Everything must stay below the fold: from the crease (+ clearance) to our bottom edge.
+        let belowFold = screen.bounds.height - creaseY - creaseClearance - bottomInset
+        guard belowFold > 120 else { return normal }
+        return isLaptopMode ? belowFold : min(normal, belowFold)
+    }
 
     private var effectiveSplit: Bool {
         guard settings.oneHanded == .off else { return false }
         switch settings.splitMode {
         case .off: return false
         case .on: return true
-        case .auto: return view.bounds.width >= 600
+        case .auto:
+            // Duo inner display held wide: split along the crease, one half per thumb.
+            if creaseIsVertical { return settings.bool(.creaseSplit) }
+            return profile.display == .other && view.bounds.width >= 600
         }
+    }
+
+    private var splitGap: CGFloat {
+        let base = view.bounds.width * CGFloat(settings.double(.splitGap))
+        if creaseIsVertical { return max(base, 2 * creaseClearance) }
+        return base
     }
 
     private var fieldKind: FieldKind {
@@ -208,11 +261,10 @@ final class KeyboardViewController: UIInputViewController, KeyboardViewDelegate 
 
     private func reloadKeys(force: Bool) {
         let ctx = layoutContext()
-        let signature = "\(ctx.language)|\(ctx.page)|\(ctx.split)|\(ctx.needsGlobe)|\(ctx.fieldKind)|\(ctx.numberRow)|\(ctx.returnLabel)|\(ctx.gifsEnabled)|\(settings.oneHanded)|\(view.bounds.width)"
+        let signature = "\(ctx.language)|\(ctx.page)|\(ctx.split)|\(ctx.needsGlobe)|\(ctx.fieldKind)|\(ctx.numberRow)|\(ctx.returnLabel)|\(ctx.gifsEnabled)|\(settings.oneHanded)|\(view.bounds.width)|\(profile.display)|\(String(describing: crease))|\(isLaptopMode)"
         guard force || signature != loadedLayoutSignature else { return }
         loadedLayoutSignature = signature
-        let gap = view.bounds.width * CGFloat(settings.double(.splitGap))
-        keyboardView.load(rows: KeyLayouts.build(ctx), shiftState: shiftState, split: ctx.split, gap: gap)
+        keyboardView.load(rows: KeyLayouts.build(ctx), shiftState: shiftState, split: ctx.split, gap: splitGap)
         heightConstraint?.constant = desiredHeight()
         layoutViews()
     }
@@ -228,7 +280,9 @@ final class KeyboardViewController: UIInputViewController, KeyboardViewDelegate 
             keyboardView.frame = area
             sideButton.isHidden = true
         case .left, .right:
-            let kw = min(area.width * 0.8, area.width - 56)
+            var kw = min(area.width * 0.8, area.width - 56)
+            // Duo inner held wide: use one panel of the fold, never straddle the crease.
+            if creaseIsVertical { kw = area.width / 2 - creaseClearance }
             let left = settings.oneHanded == .left
             keyboardView.frame = CGRect(x: left ? 0 : area.width - kw, y: area.minY, width: kw, height: area.height)
             sideButton.frame = CGRect(x: left ? kw : 0, y: area.minY, width: area.width - kw, height: area.height)
@@ -854,6 +908,13 @@ final class KeyboardViewController: UIInputViewController, KeyboardViewDelegate 
         case .fullWidth:
             settings.oneHanded = .off
             settings.splitMode = .off
+            reloadKeys(force: true)
+        case .laptop:
+            settings.set(!settings.bool(.laptopMode), for: .laptopMode)
+            if horizontalCreaseY == nil {
+                ToastView.show("Laptop mode works on iPhone Duo's inner display held upright", in: view)
+            }
+            heightConstraint?.constant = desiredHeight()
             reloadKeys(force: true)
         case .dismiss:
             dismissKeyboard()

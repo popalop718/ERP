@@ -200,30 +200,66 @@ enum KeyLayouts {
 
     // MARK: Geometry
 
-    /// Lays rows out into frames. In split mode the left half of every row is
-    /// pinned to the left edge and the right half to the right edge, with `gap`
-    /// points of empty space between them.
+    /// Lays rows out into frames. Unsplit, each row spans the full width (flexible
+    /// keys absorb the slack). Split, the two halves get exactly equal widths with
+    /// `gap` points between them, so the gap is centred on `rect.midX` — on iPhone Duo's
+    /// inner display that is precisely where the crease is, so no key sits on the fold.
     static func place(_ rows: [KeyRow], in rect: CGRect, split: Bool, gap: CGFloat) -> (keys: [PlacedKey], unit: CGFloat) {
         guard !rows.isEmpty else { return ([], 1) }
-        let usable = rect.width - (split ? gap : 0)
-        let maxUnits = rows.map { $0.keys.reduce(0) { $0 + $1.width } }.max() ?? 15
-        let unit = usable / maxUnits
         let rowH = rect.height / CGFloat(rows.count)
         var placed: [PlacedKey] = []
-        for (ri, row) in rows.enumerated() {
-            let fixed = row.keys.reduce(CGFloat(0)) { $0 + $1.width * unit }
-            let flexCount = CGFloat(row.keys.filter(\.flexible).count)
-            let extra = flexCount > 0 ? max(0, usable - fixed) / flexCount : 0
-            // Rows without flexible keys are centred.
-            var x = rect.minX + (flexCount == 0 ? max(0, usable - fixed) / 2 : 0)
-            for (ki, key) in row.keys.enumerated() {
-                if split && ki == row.splitIndex { x += gap }
-                let w = key.width * unit + (key.flexible ? extra : 0)
-                let frame = CGRect(x: x, y: rect.minY + CGFloat(ri) * rowH, width: w, height: rowH)
-                placed.append(PlacedKey(def: key, frame: frame, row: ri))
-                x += w
+
+        if !split {
+            let maxUnits = rows.map { $0.keys.reduce(0) { $0 + $1.width } }.max() ?? 15
+            let unit = rect.width / maxUnits
+            for (ri, row) in rows.enumerated() {
+                let y = rect.minY + CGFloat(ri) * rowH
+                placed += layoutSegment(row.keys, x: rect.minX, width: rect.width, unit: unit, y: y, height: rowH,
+                                        row: ri, align: .center)
             }
+            return (placed, unit)
+        }
+
+        let half = max(1, (rect.width - gap) / 2)
+        let maxHalfUnits = rows.flatMap { row -> [CGFloat] in
+            let l = row.keys[..<min(row.splitIndex, row.keys.count)].reduce(0) { $0 + $1.width }
+            let r = row.keys[min(row.splitIndex, row.keys.count)...].reduce(0) { $0 + $1.width }
+            return [l, r]
+        }.max() ?? 8
+        let unit = half / maxHalfUnits
+        for (ri, row) in rows.enumerated() {
+            let y = rect.minY + CGFloat(ri) * rowH
+            let cut = min(row.splitIndex, row.keys.count)
+            placed += layoutSegment(Array(row.keys[..<cut]), x: rect.minX, width: half, unit: unit, y: y, height: rowH,
+                                    row: ri, align: .fill)
+            placed += layoutSegment(Array(row.keys[cut...]), x: rect.maxX - half, width: half, unit: unit, y: y, height: rowH,
+                                    row: ri, align: .fill)
         }
         return (placed, unit)
+    }
+
+    private enum SegmentAlign { case center, fill }
+
+    /// Places one run of keys into `width`. Flexible keys take the leftover space;
+    /// without any, `.fill` scales every key so the run still spans the full width.
+    private static func layoutSegment(_ keys: [KeyDef], x: CGFloat, width: CGFloat, unit: CGFloat, y: CGFloat,
+                                      height: CGFloat, row: Int, align: SegmentAlign) -> [PlacedKey] {
+        guard !keys.isEmpty else { return [] }
+        let fixed = keys.reduce(CGFloat(0)) { $0 + $1.width * unit }
+        let flexCount = CGFloat(keys.filter(\.flexible).count)
+        let leftover = max(0, width - fixed)
+        var scale: CGFloat = 1
+        var extra: CGFloat = 0
+        var cursor = x
+        if flexCount > 0 { extra = leftover / flexCount }
+        else if align == .fill, fixed > 0 { scale = width / fixed }
+        else { cursor += leftover / 2 }
+        var out: [PlacedKey] = []
+        for key in keys {
+            let w = key.width * unit * scale + (key.flexible ? extra : 0)
+            out.append(PlacedKey(def: key, frame: CGRect(x: cursor, y: y, width: w, height: height), row: row))
+            cursor += w
+        }
+        return out
     }
 }

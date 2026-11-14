@@ -26,6 +26,9 @@ struct SettingsView: View {
     @AppStorage(SettingKey.keyHeight.rawValue, store: sharedDefaults) private var keyHeight = KeyHeightOption.normal.rawValue
     @AppStorage(SettingKey.spaceTrackpad.rawValue, store: sharedDefaults) private var spaceTrackpad = true
     @AppStorage(SettingKey.theme.rawValue, store: sharedDefaults) private var theme = ThemeOption.system.rawValue
+    @AppStorage(SettingKey.creaseSplit.rawValue, store: sharedDefaults) private var creaseSplit = true
+    @State private var laptopMode = KeyboardSettings.shared.bool(.laptopMode)
+    @State private var profile = DeviceProfile.current(for: UIScreen.main)
 
     // Synced with the keyboard toolbar (newest change wins), so go through KeyboardSettings.
     @State private var oneHanded = KeyboardSettings.shared.oneHanded
@@ -37,6 +40,17 @@ struct SettingsView: View {
             Section {
                 SetupCard()
                 NavigationLink("Try Duo Keyboard") { PlaygroundView() }
+            }
+
+            Section {
+                LabeledContent("This Display", value: profile.displayName)
+                Toggle("Split Along the Crease", isOn: $creaseSplit)
+                Toggle("Laptop Mode", isOn: $laptopMode)
+                    .onChange(of: laptopMode) { KeyboardSettings.shared.set($0, for: .laptopMode) }
+            } header: {
+                Text("iPhone Duo")
+            } footer: {
+                Text("Inner display held wide (book pose): with Split Keyboard on Automatic, the keyboard splits into two equal halves, one for each thumb. The gap sits on the fold, so no key is ever on the crease. Inner display held upright: keys always stay below the fold. Laptop Mode fills the whole lower half, so with iPhone Duo half-open on a table it works like a laptop keyboard. Outer display: the full keyboard, sized to the same physical key size (460 ppi vs 430 ppi inside).")
             }
 
             Section {
@@ -95,7 +109,7 @@ struct SettingsView: View {
             } header: {
                 Text("Layout")
             } footer: {
-                Text("Split works in portrait and landscape. Automatic splits when the keyboard is at least 600 pt wide, such as on a large or unfolded screen. You can also switch Split, Left, Right and Full from the toolbar (⋯) above the keys.")
+                Text("Split works in portrait and landscape. Automatic splits along the crease on iPhone Duo's inner display when it's held wide, and on other devices when the keyboard is at least 600 pt wide. You can also switch Split, Left, Right and Full from the toolbar (⋯) above the keys.")
             }
 
             Section {
@@ -146,6 +160,8 @@ struct SettingsView: View {
             oneHanded = KeyboardSettings.shared.oneHanded
             splitMode = KeyboardSettings.shared.splitMode
             languageCount = KeyboardSettings.shared.enabledLanguages.count
+            laptopMode = KeyboardSettings.shared.bool(.laptopMode)
+            profile = DeviceProfile.current(for: UIScreen.main)
         }
     }
 }

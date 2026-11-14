@@ -16,6 +16,8 @@ enum SettingKey: String, CaseIterable {
     // Layout
     case oneHanded, splitMode, splitGap, numberRow, showSecondarySymbols
     case keyHeight, spaceTrackpad, theme
+    // iPhone Duo
+    case laptopMode, creaseSplit
     // Languages & text
     case enabledLanguages, currentLanguage, textReplacements
 }
@@ -96,13 +98,15 @@ final class KeyboardSettings {
         SettingKey.keyHeight.rawValue: KeyHeightOption.normal.rawValue,
         SettingKey.spaceTrackpad.rawValue: true,
         SettingKey.theme.rawValue: ThemeOption.system.rawValue,
+        SettingKey.laptopMode.rawValue: true,
+        SettingKey.creaseSplit.rawValue: true,
         SettingKey.enabledLanguages.rawValue: KeyboardLanguage.allCases.map(\.rawValue),
         SettingKey.currentLanguage.rawValue: KeyboardLanguage.english.rawValue,
         SettingKey.textReplacements.rawValue: ["omw": "On my way!", "brb": "Be right back"],
     ]
 
     /// Keys the keyboard itself can change; the newest write (app or keyboard) wins.
-    private static let syncedKeys: Set<SettingKey> = [.currentLanguage, .splitMode, .oneHanded]
+    private static let syncedKeys: Set<SettingKey> = [.currentLanguage, .splitMode, .oneHanded, .laptopMode]
 
     let group: UserDefaults
     private let local = UserDefaults.standard

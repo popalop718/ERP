@@ -1,9 +1,28 @@
 # Duo Keyboard
 
-A full desktop-style custom keyboard for iPhone: an iOS app plus a keyboard extension,
-written in Swift (UIKit keyboard, SwiftUI settings app). It is built for wide and
-near-square screens, such as large or unfolded displays, and works on any iPhone or
-iPad running iOS 16 or later.
+A full desktop-style custom keyboard designed for **iPhone Duo**, Apple's first foldable
+iPhone. It's an iOS app plus a keyboard extension, written in Swift (UIKit keyboard,
+SwiftUI settings app). It also works on any other iPhone or iPad running iOS 16 or later.
+
+## Designed for iPhone Duo
+
+Dimensions come from [apple.com/iphone-duo/specs](https://www.apple.com/iphone-duo/specs/).
+The keyboard reads the screen's native resolution to tell which display it is on.
+
+| Display | Specs | What the keyboard does |
+|---|---|---|
+| **Inner, held wide** (book pose) | 7.6", 1878 × 2670 px, 430 ppi; unfolded 164.6 × 117.8 mm. The fold runs top to bottom through the middle. | Splits by default (Split Keyboard: *Automatic*) into **two equal halves**, one per thumb. The gap is centred **on the crease**, at least 4 mm clear on each side, so no key sits on the fold. One-handed mode uses one panel of the fold. |
+| **Inner, held upright** (tabletop pose) | The fold runs across the middle of the screen. | Keys always stay **below the fold**. **Laptop Mode** (on by default, toggle in the app or the ⋯ toolbar) fills the whole lower half with large keys, so a half-open Duo on a table types like a mini laptop. |
+| **Outer** | 5.4", 1398 × 2034 px, 460 ppi; folded 84.1 × 117.8 mm. | Full unsplit keyboard, like a regular iPhone. |
+
+Key sizes are set in **millimetres**, not points: one point is physically larger on
+the 430 ppi inner display than on the 460 ppi outer one, so the keyboard uses about 7%
+fewer points there, and keys come out the same size on both displays. Switching
+displays or rotating relays the keyboard out immediately.
+
+> The hinge angle isn't exposed to keyboards, so Laptop Mode is chosen by orientation
+> (inner display upright) plus your toggle, not by detecting the fold angle. The code
+> assumes the specs above; check it on a real device, since I couldn't test on one.
 
 ## Features
 

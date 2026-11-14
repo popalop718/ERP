@@ -19,7 +19,7 @@ struct Suggestion {
 }
 
 enum ToolAction: CaseIterable {
-    case cut, copy, paste, wordLeft, wordRight, lineStart, lineEnd, split, oneHandedLeft, oneHandedRight, fullWidth, dismiss
+    case cut, copy, paste, wordLeft, wordRight, lineStart, lineEnd, split, laptop, oneHandedLeft, oneHandedRight, fullWidth, dismiss
 
     var symbol: String {
         switch self {
@@ -31,6 +31,7 @@ enum ToolAction: CaseIterable {
         case .lineStart: return "arrow.left.to.line"
         case .lineEnd: return "arrow.right.to.line"
         case .split: return "rectangle.split.2x1"
+        case .laptop: return "laptopcomputer"
         case .oneHandedLeft: return "keyboard.onehanded.left"
         case .oneHandedRight: return "keyboard.onehanded.right"
         case .fullWidth: return "keyboard"
@@ -48,6 +49,7 @@ enum ToolAction: CaseIterable {
         case .lineStart: return "Home"
         case .lineEnd: return "End"
         case .split: return "Split"
+        case .laptop: return "Laptop"
         case .oneHandedLeft: return "Left"
         case .oneHandedRight: return "Right"
         case .fullWidth: return "Full"
